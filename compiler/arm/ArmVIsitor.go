@@ -101,7 +101,43 @@ func (v *ArmVisitor) VisitPrograma(ctx *compiler.ProgramaContext) interface{} {
 }
 
 func (v *ArmVisitor) VisitPrintlnStmt(ctx *compiler.PrintlnStmtContext) interface{} {
-	fmt.Println("🔍 Visitando println statement:", ctx.GetText())
+
+	// cod agregado 28/06
+	v.Generator.Comment("Print statement")
+
+	for _, exp := range ctx.AllExpresion() {
+		v.Visit(exp)
+	}
+
+	// Obtener el objeto de la pila
+	var value StackObject
+	obj := v.Generator.TopObject()
+
+	// Pop con el registro correcto según el tipo
+	switch obj.Type {
+	case IntType:
+		value = v.Generator.PopObject(X0)
+		v.Generator.PrintInteger(X0)
+	case StringType:
+		value = v.Generator.PopObject(X0)
+		v.Generator.PrintString(X0)
+	case FloatType:
+		value = v.Generator.PopObject(D0)
+		v.Generator.PrintFloat()
+	case BoolType:
+		value = v.Generator.PopObject(X0)
+		v.Generator.PrintBool()
+	default:
+		fmt.Println("⚠️ Tipo no soportado para impresión:", obj.Type)
+	}
+
+	fmt.Println(value)
+	return nil
+
+	// FIN agre
+
+	// cod comentado 28/06
+	/*fmt.Println("🔍 Visitando println statement:", ctx.GetText())
 
 	v.Generator.Comment("Print statement")
 	v.Generator.Comment("Visiting expresions")
@@ -140,7 +176,7 @@ func (v *ArmVisitor) VisitPrintlnStmt(ctx *compiler.PrintlnStmtContext) interfac
 		fmt.Println("⚠️ Tipo no soportado para impresión:", value.Type)
 	}
 
-	return nil
+	return nil*/
 }
 
 func (v *ArmVisitor) VisitValorEntero(ctx *compiler.ValorEnteroContext) interface{} {
@@ -401,22 +437,35 @@ func (v *ArmVisitor) VisitBinaryExp(ctx *compiler.BinaryExpContext) interface{} 
 }
 
 func (v *ArmVisitor) VisitDeclAssign(ctx *compiler.DeclAssignContext) interface{} {
-	var varName = ctx.ID().GetText()
-	v.Generator.Comment("Variable declaration: " + varName)
+	varName := ctx.ID().GetText()
+	v.Generator.Comment(fmt.Sprintf("Declaración de variable: %s", varName))
 
+	// Visitar la expresión para obtener su valor
 	v.Visit(ctx.Expresion())
 
+	// Obtener el objeto de la pila
 	topObject := v.Generator.TopObject()
 
-	obj := StackObject{
-		Type:   topObject.Type, // O el tipo correcto según la expresión
-		Length: 8,
-		Depth:  v.Generator.depth, // o simplemente usar método
-		Id:     nil,
+	// Crear objeto para la variable
+	varObj := StackObject{
+		Type:   topObject.Type,
+		Length: 8, // Todos nuestros tipos son de 8 bytes por ahora
+		Depth:  v.Generator.depth,
+		Id:     &varName,
 	}
 
-	v.Generator.PushObject(obj) // Pushea el objeto a la pila)
-	v.Generator.TagObject(varName)
+	// Para strings, necesitamos manejar el heap
+	if topObject.Type == StringType {
+		// El string ya está en el heap, solo necesitamos guardar el puntero
+		v.Generator.PopObject(X0)
+		v.Generator.Push(X0) // Volver a poner el puntero en la pila
+		v.Generator.PushObject(varObj)
+		v.Generator.TagObject(varName)
+	} else {
+		// Para otros tipos, simplemente asignamos espacio en la pila
+		v.Generator.PushObject(varObj)
+		v.Generator.TagObject(varName)
+	}
 
 	return nil
 }

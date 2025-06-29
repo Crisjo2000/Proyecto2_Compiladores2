@@ -40,6 +40,23 @@ func NewArmGenerator() *ArmGenerator {
 	}
 }
 
+// Codigo agregado 28/06
+// En el ArmGenerator
+func (a *ArmGenerator) InitializeHeapPointer() {
+	a.instructions = append(a.instructions, "ADR HP, heap")
+	a.instructions = append(a.instructions, "MOV X10, HP") // Mantener consistencia
+}
+
+func (a *ArmGenerator) Push(rs string) {
+	a.instructions = append(a.instructions, "STR "+rs+", [SP, #-16]!") // Alinear a 16 bytes
+}
+
+func (a *ArmGenerator) Pop(rd string) {
+	a.instructions = append(a.instructions, "LDR "+rd+", [SP], #16") // Alinear a 16 bytes
+}
+
+//------------------------------------------
+
 //var int labelCounter = 0;
 
 func (ag *ArmGenerator) PushObject(obj StackObject) {
@@ -200,13 +217,14 @@ func (a *ArmGenerator) Mov(rd string, imm int) {
 	a.instructions = append(a.instructions, fmt.Sprintf("MOV %s, #%d", rd, imm))
 }
 
-func (a *ArmGenerator) Push(rs string) {
+// cod comentado 28/06
+/*func (a *ArmGenerator) Push(rs string) {
 	a.instructions = append(a.instructions, "STR "+rs+", [SP, #-8]!")
 }
 
 func (a *ArmGenerator) Pop(rd string) {
 	a.instructions = append(a.instructions, "LDR "+rd+", [SP], #8")
-}
+}*/
 
 func (a *ArmGenerator) Svc() {
 	a.instructions = append(a.instructions, "SVC #0")

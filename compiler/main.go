@@ -113,6 +113,15 @@ func main() {
 		visitorArm.Visit(arbolito)
 		ta2.SetText(visitorArm.Generator.String())
 
+		err2 := os.WriteFile("./assembler/program.s", []byte(visitorArm.Generator.String()), 0644)
+		if err2 != nil {
+			fmt.Println("Error al guardar program.s:", err2)
+		} else {
+			fmt.Println("Archivo program.s generado exitosamente.")
+		}
+
+		ta2.SetText(visitorArm.Generator.String())
+
 		// Generación de reporte de errores
 		currentErrorsReportHTML = errorTable.GenerateHTMLReport()
 		err := os.WriteFile(errorsReportPath, []byte(currentErrorsReportHTML), 0644)

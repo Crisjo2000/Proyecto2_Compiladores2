@@ -1,0 +1,4 @@
+
+make program
+clear
+./program
