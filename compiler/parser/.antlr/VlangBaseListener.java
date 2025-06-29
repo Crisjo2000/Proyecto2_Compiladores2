@@ -1,4 +1,4 @@
-// Generated from /home/luisa/Documentos/2025/Vaqueras/Proyecto 2/OLC2_Proyecto2_G10/compiler/parser/Vlang.g4 by ANTLR 4.13.1
+// Generated from /home/luisa/Documentos/2025/Vaqueras/compi2 781/Lab/Proyecto2_vaqueras_res/Proyecto2_Compiladores2/compiler/parser/Vlang.g4 by ANTLR 4.13.1
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;

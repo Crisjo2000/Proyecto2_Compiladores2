@@ -1,4 +1,4 @@
-// Generated from /home/luisa/Documentos/2025/Vaqueras/Proyecto 2/OLC2_Proyecto2_G10/compiler/parser/Vlang.g4 by ANTLR 4.13.1
+// Generated from /home/luisa/Documentos/2025/Vaqueras/compi2 781/Lab/Proyecto2_vaqueras_res/Proyecto2_Compiladores2/compiler/parser/Vlang.g4 by ANTLR 4.13.1
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
@@ -141,14 +141,6 @@ public class VlangParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_programa; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterPrograma(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitPrograma(this);
-		}
 	}
 
 	public final ProgramaContext programa() throws RecognitionException {
@@ -241,14 +233,6 @@ public class VlangParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_stmt; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterStmt(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitStmt(this);
-		}
 	}
 
 	public final StmtContext stmt() throws RecognitionException {
@@ -411,14 +395,6 @@ public class VlangParser extends Parser {
 			return getRuleContext(Else_stmtContext.class,0);
 		}
 		public IfStmtContext(If_stmtContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterIfStmt(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitIfStmt(this);
-		}
 	}
 
 	public final If_stmtContext if_stmt() throws RecognitionException {
@@ -500,14 +476,6 @@ public class VlangParser extends Parser {
 			return getRuleContext(StmtContext.class,i);
 		}
 		public IfChainContext(If_chainContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterIfChain(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitIfChain(this);
-		}
 	}
 
 	public final If_chainContext if_chain() throws RecognitionException {
@@ -577,14 +545,6 @@ public class VlangParser extends Parser {
 			return getRuleContext(StmtContext.class,i);
 		}
 		public ElseStmtContext(Else_stmtContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterElseStmt(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitElseStmt(this);
-		}
 	}
 
 	public final Else_stmtContext else_stmt() throws RecognitionException {
@@ -655,14 +615,6 @@ public class VlangParser extends Parser {
 			return getToken(VlangParser.COMMA, i);
 		}
 		public PrintlnStmtContext(PrintlnContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterPrintlnStmt(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitPrintlnStmt(this);
-		}
 	}
 
 	public final PrintlnContext println() throws RecognitionException {
@@ -737,14 +689,6 @@ public class VlangParser extends Parser {
 			return getToken(VlangParser.COMMA, i);
 		}
 		public PrintStmtContext(PrintContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterPrintStmt(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitPrintStmt(this);
-		}
 	}
 
 	public final PrintContext print() throws RecognitionException {
@@ -819,14 +763,6 @@ public class VlangParser extends Parser {
 			return getRuleContext(StmtContext.class,i);
 		}
 		public WhileStmtContext(Forwhile_stmtContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterWhileStmt(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitWhileStmt(this);
-		}
 	}
 
 	public final Forwhile_stmtContext forwhile_stmt() throws RecognitionException {
@@ -909,14 +845,6 @@ public class VlangParser extends Parser {
 			return getRuleContext(StmtContext.class,i);
 		}
 		public ClasicForContext(ForClasic_stmtContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterClasicFor(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitClasicFor(this);
-		}
 	}
 
 	public final ForClasic_stmtContext forClasic_stmt() throws RecognitionException {
@@ -1002,14 +930,6 @@ public class VlangParser extends Parser {
 			return getRuleContext(StmtContext.class,i);
 		}
 		public ForStmtContext(For_stmtContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterForStmt(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitForStmt(this);
-		}
 	}
 
 	public final For_stmtContext for_stmt() throws RecognitionException {
@@ -1098,14 +1018,6 @@ public class VlangParser extends Parser {
 			return getToken(VlangParser.DOT, i);
 		}
 		public NumericRangeContext(RangeContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterNumericRange(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitNumericRange(this);
-		}
 	}
 
 	public final RangeContext range() throws RecognitionException {
@@ -1166,14 +1078,6 @@ public class VlangParser extends Parser {
 			return getRuleContext(Default_clauseContext.class,0);
 		}
 		public SwitchStmtContext(Switch_stmtContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterSwitchStmt(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitSwitchStmt(this);
-		}
 	}
 
 	public final Switch_stmtContext switch_stmt() throws RecognitionException {
@@ -1262,14 +1166,6 @@ public class VlangParser extends Parser {
 			return getToken(VlangParser.COMMA, i);
 		}
 		public CaseClauseContext(Case_clauseContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterCaseClause(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitCaseClause(this);
-		}
 	}
 
 	public final Case_clauseContext case_clause() throws RecognitionException {
@@ -1354,14 +1250,6 @@ public class VlangParser extends Parser {
 			return getRuleContext(StmtContext.class,i);
 		}
 		public DefaultClauseContext(Default_clauseContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterDefaultClause(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitDefaultClause(this);
-		}
 	}
 
 	public final Default_clauseContext default_clause() throws RecognitionException {
@@ -1437,14 +1325,6 @@ public class VlangParser extends Parser {
 			return getToken(VlangParser.COMMA, i);
 		}
 		public DeclSlicesContext(Slice_stmtContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterDeclSlices(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitDeclSlices(this);
-		}
 	}
 
 	public final Slice_stmtContext slice_stmt() throws RecognitionException {
@@ -1525,14 +1405,6 @@ public class VlangParser extends Parser {
 			return getRuleContext(ParametrosContext.class,0);
 		}
 		public FuncCallContext(Func_callContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterFuncCall(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitFuncCall(this);
-		}
 	}
 
 	public final Func_callContext func_call() throws RecognitionException {
@@ -1605,14 +1477,6 @@ public class VlangParser extends Parser {
 			return getRuleContext(StmtContext.class,i);
 		}
 		public FuncDeclContext(Func_dclContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterFuncDecl(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitFuncDecl(this);
-		}
 	}
 
 	public final Func_dclContext func_dcl() throws RecognitionException {
@@ -1706,14 +1570,6 @@ public class VlangParser extends Parser {
 			return getRuleContext(Assign_stmtContext.class,i);
 		}
 		public StructDeclContext(Struct_dclContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterStructDecl(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitStructDecl(this);
-		}
 	}
 
 	public final Struct_dclContext struct_dcl() throws RecognitionException {
@@ -1775,27 +1631,11 @@ public class VlangParser extends Parser {
 	public static class ContinueStmtContext extends Transfer_stmtContext {
 		public TerminalNode CONTINUE_KW() { return getToken(VlangParser.CONTINUE_KW, 0); }
 		public ContinueStmtContext(Transfer_stmtContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterContinueStmt(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitContinueStmt(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class BreakStmtContext extends Transfer_stmtContext {
 		public TerminalNode BREAK_KW() { return getToken(VlangParser.BREAK_KW, 0); }
 		public BreakStmtContext(Transfer_stmtContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterBreakStmt(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitBreakStmt(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class ReturnStmtContext extends Transfer_stmtContext {
@@ -1804,14 +1644,6 @@ public class VlangParser extends Parser {
 			return getRuleContext(ExpresionContext.class,0);
 		}
 		public ReturnStmtContext(Transfer_stmtContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterReturnStmt(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitReturnStmt(this);
-		}
 	}
 
 	public final Transfer_stmtContext transfer_stmt() throws RecognitionException {
@@ -1892,14 +1724,6 @@ public class VlangParser extends Parser {
 			return getRuleContext(ExpresionContext.class,0);
 		}
 		public DirectAssignContext(Assign_stmtContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterDirectAssign(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitDirectAssign(this);
-		}
 	}
 
 	public final Assign_stmtContext assign_stmt() throws RecognitionException {
@@ -1949,14 +1773,6 @@ public class VlangParser extends Parser {
 			return getRuleContext(ExpresionContext.class,0);
 		}
 		public DeclAssignContext(Decl_stmtContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterDeclAssign(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitDeclAssign(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class DeclAssignTypeContext extends Decl_stmtContext {
@@ -1972,14 +1788,6 @@ public class VlangParser extends Parser {
 			return getRuleContext(ExpresionContext.class,0);
 		}
 		public DeclAssignTypeContext(Decl_stmtContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterDeclAssignType(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitDeclAssignType(this);
-		}
 	}
 
 	public final Decl_stmtContext decl_stmt() throws RecognitionException {
@@ -2057,14 +1865,6 @@ public class VlangParser extends Parser {
 			return getToken(VlangParser.COMMA, i);
 		}
 		public ListExpressionsContext(List_expresionesContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterListExpressions(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitListExpressions(this);
-		}
 	}
 
 	public final List_expresionesContext list_expresiones() throws RecognitionException {
@@ -2129,14 +1929,6 @@ public class VlangParser extends Parser {
 			return getToken(VlangParser.DOT, i);
 		}
 		public IdPatternContext(Id_patternContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterIdPattern(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitIdPattern(this);
-		}
 	}
 
 	public final Id_patternContext id_pattern() throws RecognitionException {
@@ -2196,14 +1988,6 @@ public class VlangParser extends Parser {
 			return getRuleContext(IncredecreContext.class,0);
 		}
 		public IncredecrContext(ExpresionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterIncredecr(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitIncredecr(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class Fn_lenxContext extends ExpresionContext {
@@ -2218,14 +2002,6 @@ public class VlangParser extends Parser {
 		public TerminalNode COMMA() { return getToken(VlangParser.COMMA, 0); }
 		public TerminalNode RPAREN() { return getToken(VlangParser.RPAREN, 0); }
 		public Fn_lenxContext(ExpresionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterFn_lenx(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitFn_lenx(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class ValorexpresionContext extends ExpresionContext {
@@ -2233,14 +2009,6 @@ public class VlangParser extends Parser {
 			return getRuleContext(ValorContext.class,0);
 		}
 		public ValorexpresionContext(ExpresionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterValorexpresion(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitValorexpresion(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class AsignacionforContext extends ExpresionContext {
@@ -2250,14 +2018,6 @@ public class VlangParser extends Parser {
 			return getRuleContext(ExpresionContext.class,0);
 		}
 		public AsignacionforContext(ExpresionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterAsignacionfor(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitAsignacionfor(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class ExpdotexpContext extends ExpresionContext {
@@ -2267,14 +2027,6 @@ public class VlangParser extends Parser {
 			return getRuleContext(ExpresionContext.class,0);
 		}
 		public ExpdotexpContext(ExpresionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterExpdotexp(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitExpdotexp(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class Fn_typeOFContext extends ExpresionContext {
@@ -2285,14 +2037,6 @@ public class VlangParser extends Parser {
 		}
 		public TerminalNode RPAREN() { return getToken(VlangParser.RPAREN, 0); }
 		public Fn_typeOFContext(ExpresionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterFn_typeOF(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitFn_typeOF(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class BinaryExpContext extends ExpresionContext {
@@ -2319,14 +2063,6 @@ public class VlangParser extends Parser {
 		public TerminalNode AND() { return getToken(VlangParser.AND, 0); }
 		public TerminalNode OR() { return getToken(VlangParser.OR, 0); }
 		public BinaryExpContext(ExpresionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterBinaryExp(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitBinaryExp(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class CorchetesexpreContext extends ExpresionContext {
@@ -2336,14 +2072,6 @@ public class VlangParser extends Parser {
 		}
 		public TerminalNode RBRACK() { return getToken(VlangParser.RBRACK, 0); }
 		public CorchetesexpreContext(ExpresionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterCorchetesexpre(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitCorchetesexpre(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class FuncionexpreContext extends ExpresionContext {
@@ -2351,14 +2079,6 @@ public class VlangParser extends Parser {
 			return getRuleContext(Func_callContext.class,0);
 		}
 		public FuncionexpreContext(ExpresionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterFuncionexpre(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitFuncionexpre(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class UnarioContext extends ExpresionContext {
@@ -2369,14 +2089,6 @@ public class VlangParser extends Parser {
 		public TerminalNode NOT() { return getToken(VlangParser.NOT, 0); }
 		public TerminalNode MINUS() { return getToken(VlangParser.MINUS, 0); }
 		public UnarioContext(ExpresionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterUnario(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitUnario(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class ParentesisexpreContext extends ExpresionContext {
@@ -2386,14 +2098,6 @@ public class VlangParser extends Parser {
 		}
 		public TerminalNode RPAREN() { return getToken(VlangParser.RPAREN, 0); }
 		public ParentesisexpreContext(ExpresionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterParentesisexpre(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitParentesisexpre(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class Fn_parsefloatContext extends ExpresionContext {
@@ -2404,14 +2108,6 @@ public class VlangParser extends Parser {
 		}
 		public TerminalNode RPAREN() { return getToken(VlangParser.RPAREN, 0); }
 		public Fn_parsefloatContext(ExpresionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterFn_parsefloat(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitFn_parsefloat(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class IndexAccesoContext extends ExpresionContext {
@@ -2424,27 +2120,11 @@ public class VlangParser extends Parser {
 		}
 		public TerminalNode RBRACK() { return getToken(VlangParser.RBRACK, 0); }
 		public IndexAccesoContext(ExpresionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterIndexAcceso(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitIndexAcceso(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class IdContext extends ExpresionContext {
 		public TerminalNode ID() { return getToken(VlangParser.ID, 0); }
 		public IdContext(ExpresionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterId(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitId(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class Expdotexp1Context extends ExpresionContext {
@@ -2454,14 +2134,6 @@ public class VlangParser extends Parser {
 		}
 		public TerminalNode DOT() { return getToken(VlangParser.DOT, 0); }
 		public Expdotexp1Context(ExpresionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterExpdotexp1(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitExpdotexp1(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class Fn_indexOfContext extends ExpresionContext {
@@ -2476,14 +2148,6 @@ public class VlangParser extends Parser {
 		public TerminalNode COMMA() { return getToken(VlangParser.COMMA, 0); }
 		public TerminalNode RPAREN() { return getToken(VlangParser.RPAREN, 0); }
 		public Fn_indexOfContext(ExpresionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterFn_indexOf(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitFn_indexOf(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class Fn_joinContext extends ExpresionContext {
@@ -2498,14 +2162,6 @@ public class VlangParser extends Parser {
 		public TerminalNode COMMA() { return getToken(VlangParser.COMMA, 0); }
 		public TerminalNode RPAREN() { return getToken(VlangParser.RPAREN, 0); }
 		public Fn_joinContext(ExpresionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterFn_join(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitFn_join(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class Fn_atoiContext extends ExpresionContext {
@@ -2516,14 +2172,6 @@ public class VlangParser extends Parser {
 		}
 		public TerminalNode RPAREN() { return getToken(VlangParser.RPAREN, 0); }
 		public Fn_atoiContext(ExpresionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterFn_atoi(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitFn_atoi(this);
-		}
 	}
 
 	public final ExpresionContext expresion() throws RecognitionException {
@@ -2956,14 +2604,6 @@ public class VlangParser extends Parser {
 			return getToken(VlangParser.COMMA, i);
 		}
 		public ParamListContext(ParametrosContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterParamList(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitParamList(this);
-		}
 	}
 
 	public final ParametrosContext parametros() throws RecognitionException {
@@ -3023,14 +2663,6 @@ public class VlangParser extends Parser {
 			return getRuleContext(Id_patternContext.class,0);
 		}
 		public FuncParamContext(Func_paramContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterFuncParam(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitFuncParam(this);
-		}
 	}
 
 	public final Func_paramContext func_param() throws RecognitionException {
@@ -3080,14 +2712,6 @@ public class VlangParser extends Parser {
 			return getToken(VlangParser.COMMA, i);
 		}
 		public ArgListContext(Arg_listContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterArgList(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitArgList(this);
-		}
 	}
 
 	public final Arg_listContext arg_list() throws RecognitionException {
@@ -3148,14 +2772,6 @@ public class VlangParser extends Parser {
 			return getRuleContext(Var_typeContext.class,0);
 		}
 		public FuncArgContext(Func_argContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterFuncArg(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitFuncArg(this);
-		}
 	}
 
 	public final Func_argContext func_arg() throws RecognitionException {
@@ -3191,14 +2807,6 @@ public class VlangParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_valores; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterValores(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitValores(this);
-		}
 	}
 
 	public final ValoresContext valores() throws RecognitionException {
@@ -3238,79 +2846,31 @@ public class VlangParser extends Parser {
 	public static class ValorDecimalContext extends ValorContext {
 		public TerminalNode DECIMAL() { return getToken(VlangParser.DECIMAL, 0); }
 		public ValorDecimalContext(ValorContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterValorDecimal(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitValorDecimal(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class ValorEnteroContext extends ValorContext {
 		public TerminalNode ENTERO() { return getToken(VlangParser.ENTERO, 0); }
 		public ValorEnteroContext(ValorContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterValorEntero(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitValorEntero(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class ValorBooleanoContext extends ValorContext {
 		public TerminalNode BOOLEANO() { return getToken(VlangParser.BOOLEANO, 0); }
 		public ValorBooleanoContext(ValorContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterValorBooleano(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitValorBooleano(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class ValorCaracterContext extends ValorContext {
 		public TerminalNode CARACTER() { return getToken(VlangParser.CARACTER, 0); }
 		public ValorCaracterContext(ValorContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterValorCaracter(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitValorCaracter(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class ValorCadenaContext extends ValorContext {
 		public TerminalNode CADENA() { return getToken(VlangParser.CADENA, 0); }
 		public ValorCadenaContext(ValorContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterValorCadena(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitValorCadena(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class ValorFloatContext extends ValorContext {
 		public TerminalNode FLOAT() { return getToken(VlangParser.FLOAT, 0); }
 		public ValorFloatContext(ValorContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterValorFloat(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitValorFloat(this);
-		}
 	}
 
 	public final ValorContext valor() throws RecognitionException {
@@ -3407,14 +2967,6 @@ public class VlangParser extends Parser {
 			return getRuleContext(Struct_propContext.class,i);
 		}
 		public StructInstanciaContext(Strct_instanciaContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterStructInstancia(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitStructInstancia(this);
-		}
 	}
 
 	public final Strct_instanciaContext strct_instancia() throws RecognitionException {
@@ -3484,14 +3036,6 @@ public class VlangParser extends Parser {
 		}
 		public TerminalNode COMMA() { return getToken(VlangParser.COMMA, 0); }
 		public StructAttrContext(Struct_propContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterStructAttr(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitStructAttr(this);
-		}
 	}
 
 	public final Struct_propContext struct_prop() throws RecognitionException {
@@ -3564,74 +3108,26 @@ public class VlangParser extends Parser {
 	@SuppressWarnings("CheckReturnValue")
 	public static class VoidTypeContext extends Var_typeContext {
 		public VoidTypeContext(Var_typeContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterVoidType(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitVoidType(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class BoolTypeContext extends Var_typeContext {
 		public BoolTypeContext(Var_typeContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterBoolType(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitBoolType(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class StringTypeContext extends Var_typeContext {
 		public StringTypeContext(Var_typeContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterStringType(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitStringType(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class CharTypeContext extends Var_typeContext {
 		public CharTypeContext(Var_typeContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterCharType(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitCharType(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class IntTypeContext extends Var_typeContext {
 		public IntTypeContext(Var_typeContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterIntType(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitIntType(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class FloatTypeContext extends Var_typeContext {
 		public FloatTypeContext(Var_typeContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterFloatType(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitFloatType(this);
-		}
 	}
 
 	public final Var_typeContext var_type() throws RecognitionException {
@@ -3724,14 +3220,6 @@ public class VlangParser extends Parser {
 		public TerminalNode LPAREN() { return getToken(VlangParser.LPAREN, 0); }
 		public TerminalNode RPAREN() { return getToken(VlangParser.RPAREN, 0); }
 		public StructVectorContext(Struct_vectorContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterStructVector(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitStructVector(this);
-		}
 	}
 
 	public final Struct_vectorContext struct_vector() throws RecognitionException {
@@ -3784,14 +3272,6 @@ public class VlangParser extends Parser {
 			return getRuleContext(ExpresionContext.class,0);
 		}
 		public Incremento2Context(IncredecreContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterIncremento2(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitIncremento2(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class Decremento2Context extends IncredecreContext {
@@ -3801,42 +3281,18 @@ public class VlangParser extends Parser {
 			return getRuleContext(ExpresionContext.class,0);
 		}
 		public Decremento2Context(IncredecreContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterDecremento2(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitDecremento2(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class IncrementoContext extends IncredecreContext {
 		public TerminalNode ID() { return getToken(VlangParser.ID, 0); }
 		public TerminalNode INC() { return getToken(VlangParser.INC, 0); }
 		public IncrementoContext(IncredecreContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterIncremento(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitIncremento(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class DecrementoContext extends IncredecreContext {
 		public TerminalNode ID() { return getToken(VlangParser.ID, 0); }
 		public TerminalNode DEC() { return getToken(VlangParser.DEC, 0); }
 		public DecrementoContext(IncredecreContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).enterDecremento(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof VlangListener ) ((VlangListener)listener).exitDecremento(this);
-		}
 	}
 
 	public final IncredecreContext incredecre() throws RecognitionException {

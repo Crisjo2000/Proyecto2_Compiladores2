@@ -55,6 +55,32 @@ func (a *ArmGenerator) Pop(rd string) {
 	a.instructions = append(a.instructions, "LDR "+rd+", [SP], #16") // Alinear a 16 bytes
 }
 
+func (ag *ArmGenerator) DebugStack() {
+	ag.Comment("=== DEBUG STACK ===")
+	for i, obj := range ag.stack {
+		id := "nil"
+		if obj.Id != nil {
+			id = *obj.Id
+		}
+		ag.Comment(fmt.Sprintf("Pos %d: Tipo=%v Profundidad=%d ID=%s",
+			i, obj.Type, obj.Depth, id))
+	}
+}
+
+func (ag *ArmGenerator) FindObject(id string) (int, StackObject, bool) {
+	for i := len(ag.stack) - 1; i >= 0; i-- {
+		if ag.stack[i].Id != nil && *ag.stack[i].Id == id {
+			// Calcular offset
+			offset := 0
+			for j := i + 1; j < len(ag.stack); j++ {
+				offset += ag.stack[j].Length
+			}
+			return offset, ag.stack[i], true
+		}
+	}
+	return 0, StackObject{}, false
+}
+
 //------------------------------------------
 
 //var int labelCounter = 0;

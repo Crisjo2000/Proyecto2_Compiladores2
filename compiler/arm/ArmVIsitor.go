@@ -52,6 +52,13 @@ func (v *ArmVisitor) Visit(tree antlr.ParseTree) interface{} {
 		return v.VisitId(node)
 	case *compiler.DirectAssignContext:
 		return v.VisitDirectAssign(node)
+	case *compiler.IfStmtContext:
+		return v.VisitIfStmt(node)
+	case *compiler.IfChainContext:
+		return v.VisitIfChain(node, v.Generator.GetLabel())
+	case *compiler.ElseStmtContext:
+		return v.VisitElseStmt(node)
+
 	default:
 		fmt.Printf("⚠️ Tipo inesperado en Visit(): %T\n", tree)
 		return tree.Accept(v)
@@ -492,5 +499,60 @@ func (v *ArmVisitor) VisitDirectAssign(ctx *compiler.DirectAssignContext) interf
 		v.Generator.Push(X0)
 		v.Generator.PushObject(varObject)
 	}
+	return nil
+}
+
+// codigo para hacer los if  if
+func (v *ArmVisitor) VisitIfStmt(ctx *compiler.IfStmtContext) interface{} {
+	fmt.Println("🔍 Visitando IfStmt")
+
+	endLabel := v.Generator.GetLabel()
+
+	for i, chain := range ctx.AllIf_chain() {
+		fmt.Println(strconv.Itoa(i))
+		nextLabel := v.Generator.GetLabel()
+		realChain := chain.(*compiler.IfChainContext) // ⚠️ type assertion
+		v.VisitIfChain(realChain, nextLabel)
+		v.Generator.B(endLabel)
+		v.Generator.SetLabel(nextLabel)
+	}
+
+	if ctx.Else_stmt() != nil {
+		v.VisitElseStmt(ctx.Else_stmt().(*compiler.ElseStmtContext))
+
+	}
+
+	v.Generator.SetLabel(endLabel)
+	return nil
+}
+
+func (v *ArmVisitor) VisitIfChain(ctx *compiler.IfChainContext, elseLabel string) interface{} {
+	fmt.Println("🔍 Visitando IfChain")
+
+	// Evaluar la expresión condicional
+	v.Visit(ctx.Expresion())
+
+	// Sacar el valor booleano
+	obj := v.Generator.PopObject(X0)
+	if obj.Type != BoolType {
+		fmt.Println("⚠️ Condición no booleana en If")
+	}
+
+	// Si es falso, saltar
+	v.Generator.Cmp(X0, "0")
+	v.Generator.Beq(elseLabel)
+
+	// Visitar statements del bloque if
+	for _, stmt := range ctx.AllStmt() {
+		v.Visit(stmt)
+	}
+	return nil
+}
+func (v *ArmVisitor) VisitElseStmt(ctx *compiler.ElseStmtContext) interface{} {
+	//v.ScopeTrace.PushScope("else")
+	for _, stmt := range ctx.AllStmt() {
+		v.Visit(stmt)
+	}
+	//v.ScopeTrace.PopScope()
 	return nil
 }

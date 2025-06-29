@@ -1,4 +1,4 @@
 
 make program
-clear
+
 ./program
