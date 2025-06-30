@@ -1,228 +1,125 @@
-grammar Vlang; 
+grammar Vlang;
 
-
-// === Axioma principal ===
+// === Reglas del Parser ===
 
 programa: (stmt)+ EOF;
 
-/*
-Desde el codigo vamos a recorrer Stmt y vamos 
-a ver de que tipo es cada uno entonces, no podemos 
-darle una etiqueta a cada uno 
- */
-
 stmt:
-	 decl_stmt                
-	 | assign_stmt
-     | if_stmt
-    // | while_stmt  
-     | for_stmt
-     | func_call 
-	 | func_dcl
-     | struct_dcl
-     | strct_instancia
-     | transfer_stmt       
-     | println 
-     | print
-     | incredecre
-     | forwhile_stmt
-     | forClasic_stmt
-     | switch_stmt
-     | slice_stmt
-     ;
+    (  decl_stmt
+    | assign_stmt
+    | if_stmt
+    | for_stmt
+    | func_call
+    | func_dcl
+    | struct_dcl
+    | strct_instancia
+    | transfer_stmt
+    | println
+    | print
+    | incredecre
+    | forwhile_stmt
+    | forClasic_stmt
+    | switch_stmt
+    | slice_stmt
+    | block_stmt
+    ) PUNTO_COMA?
+    ;
 
+block_stmt: LLA_IZQ stmt* LLA_DER # BlockStmt;
 
+if_stmt: if_chain (ELSE if_chain)* else_stmt? # IfStmt;
 
-if_stmt: if_chain (ELSE_KW if_chain)* else_stmt? # IfStmt;
+if_chain: IF expresion LLA_IZQ stmt* LLA_DER # IfChain;
 
-if_chain: IF_KW expresion  LCOR stmt* RCOR # IfChain;
+else_stmt: ELSE LLA_IZQ stmt* LLA_DER # ElseStmt;
 
-else_stmt: ELSE_KW LCOR stmt* RCOR # ElseStmt;
+println: PRINTLN PAR_IZQ expresion (COMA expresion)* PAR_DER # PrintlnStmt;
+print: PRINT PAR_IZQ expresion (COMA expresion)* PAR_DER # PrintStmt;
 
-println: 'println'  LPAREN expresion (COMMA expresion)* RPAREN # PrintlnStmt;
-print: 'print'  LPAREN expresion (COMMA expresion)* RPAREN # PrintStmt;
+forwhile_stmt: FOR expresion LLA_IZQ stmt* LLA_DER # WhileStmt;
 
-//while_stmt: WHILE_KW expresion LCOR stmt* RCOR # WhileStmt;
+forClasic_stmt: FOR assign_stmt PUNTO_COMA expresion PUNTO_COMA incredecre LLA_IZQ stmt* LLA_DER # ClasicFor;
 
-// WHILE
-forwhile_stmt: FOR_KW expresion LCOR stmt* RCOR # WhileStmt;
-
-forClasic_stmt: FOR_KW assign_stmt PYC expresion PYC incredecre LCOR stmt* RCOR # clasicFor;
-
-// FOR NORMAL
 for_stmt:
-	FOR_KW ID IN_KW (expresion | range) LCOR stmt* RCOR # ForStmt;
+    FOR ID 'in' (expresion | range) LLA_IZQ stmt* LLA_DER # ForStmt;
 
-range: expresion DOT DOT DOT expresion # NumericRange;
+range: expresion '...' expresion # NumericRange;
 
-
-// === SWITCH  ===
-switch_stmt: 
-     SWITCH_KW ID LCOR  (case_clause)+ (default_clause)?RCOR # SwitchStmt;
+switch_stmt:
+    SWITCH ID LLA_IZQ (case_clause)+ (default_clause)? LLA_DER # SwitchStmt;
 
 case_clause:
-    CASE_KW (expresion (COMMA expresion)*) COLON 
+    CASE (expresion (COMA expresion)*) D_PUNTO
         stmt* # CaseClause;
 
 default_clause:
-    'default' COLON 
+    DEFAULT D_PUNTO
         stmt* # DefaultClause;
 
-// === SLICE ===
-slice_stmt :ID ASSIGN LBRACK RBRACK var_type LCOR (expresion (COMMA expresion)*) RCOR #DeclSlices ;
+slice_stmt: ID ASIGN '[' ']' var_type LLA_IZQ (expresion (COMA expresion)*) LLA_DER #DeclSlices;
 
-//list_expresiones : expresion;
+func_call: id_pattern PAR_IZQ (parametros)? PAR_DER # FuncCall;
 
+func_dcl:
+    FN ID PAR_IZQ (arg_list)? PAR_DER (var_type)? LLA_IZQ stmt* LLA_DER # FuncDecl;
 
-// ---------------------- FUNCIONES------------------------------------------------
-
-
-
-
-/// Llamadas a funciones catch
-// id ( 1,2,3,4)
-func_call: id_pattern LPAREN (parametros)? RPAREN # FuncCall
-    
-;
-
-
-func_dcl: 
-    // id(parametros | vacio )  { } 
-    //    visitor -> recorrer esos stmts
-    // fn id (){}
-    // fn id (x int, n string) tipo_dato {}
-    // fn id () tipo_dato {}
-    FN_KW ID LPAREN (arg_list)? RPAREN (var_type)? LCOR stmt* RCOR # FuncDecl
-    ;
-
-
-/*struct 
-<NombreStruct> {
-<Tipo> <NombreAtributo>;
-...
-} */
 struct_dcl:
-    // struct ID { }
-    /**
-    TODO: 
-    Agregar la posilidad de inicializar
-    los atributos sin asignacion
-    
-     */
-    'struct' ID LCOR (assign_stmt)* RCOR # StructDecl
-    ;
-
+    'struct' ID LLA_IZQ (assign_stmt)* LLA_DER # StructDecl;
 
 transfer_stmt:
-	RETURN_KW expresion?	# ReturnStmt
-	| BREAK_KW		# BreakStmt
-	| CONTINUE_KW	# ContinueStmt;
-
+    RETURN expresion?    # ReturnStmt
+    | BREAK               # BreakStmt
+    | 'continue'          # ContinueStmt
+    ;
 
 assign_stmt:
-	id_pattern ASSIGN expresion  	# DirectAssign
-
-    ; 
-
-decl_stmt: 
-    MUT ID ASSIGN expresion # DeclAssign
-    | MUT id_pattern var_type ASSIGN expresion # DeclAssignType
-//nuevo
-   
-    ; 
-
-    //nuevo
-list_expresiones: expresion (COMMA expresion)* # ListExpressions;
-
-id_pattern: ID (DOT ID)* # IdPattern;
-
-// === Reglas de expresiones ===
-expresion
-    : valor                                                #valorexpresion        
-    | func_call                                            #funcionexpre
-    | LPAREN expresion RPAREN                              #parentesisexpre
-    | LBRACK expresion RBRACK                              #corchetesexpre
-    | op=(NOT | MINUS) expresion                           #unario
-
-
-
-	| left = expresion op = (MUL | DIV | MOD) right = expresion	# BinaryExp// a * b, a / b, a % b
-	| left = expresion op = (PLUS | MINUS) right = expresion    # BinaryExp // a + b, a - b
-	| left = expresion op = ( LT | LE | GT | GE) right = expresion	# BinaryExp // a < b, a <= b, a > b, a >= b
-	| left = expresion op = (EQ | NEQ ) right = expresion	# BinaryExp // a == b, a != b
-	| left = expresion op = AND right = expresion		    # BinaryExp // a && b
-	| left = expresion op = OR right = expresion 			# BinaryExp // a || b
-
-    | ID                                                   #id              
-    | incredecre                                           #incredecr      
-    | ID DOT ID                                            #expdotexp1             
-    | ID DOT expresion                                     #expdotexp      
-    | ID ASSIGN expresion                                  #asignacionfor
-    | id_pattern LBRACK expresion RBRACK                           #indexAcceso
-
-    // ===== Funciones =====
-    |ATOI_KW LPAREN expresion RPAREN                       #fn_atoi
-    |PARSEFLOAT_KW LPAREN expresion RPAREN                 #fn_parsefloat
-    |TYPEOF_KW LPAREN expresion RPAREN                     #fn_typeOF
-    | INDEX_KW LPAREN expresion COMMA expresion RPAREN     #fn_indexOf
-    | LEN LPAREN expresion COMMA expresion RPAREN          #fn_lenx
-    | JOIN_KW LPAREN expresion COMMA expresion RPAREN      #fn_join
-
-    
+    id_pattern ASIGN expresion      # DirectAssign
     ;
 
-// === Parámetros en llamadas ===
-parametros: func_param (COMMA func_param)* # ParamList;
+decl_stmt:
+    MUT ID ASIGN expresion                # DeclAssignInferred
+    | MUT ID var_type (ASIGN expresion)?  # DeclAssignExplicit
+    ;
+
+list_expresiones: expresion (COMA expresion)* # ListExpressions;
+
+id_pattern: ID ('.' ID)* # IdPattern;
+
+expresion
+    : valor                                             # valorExpresion
+    | func_call                                         # funcionExpresion
+    | PAR_IZQ expresion PAR_DER                           # parentesisExpresion
+    | op=('!' | '-') expresion                            # unarioExpresion
+    | left=expresion op=('*' | '/' | '%') right=expresion # BinaryExp
+    | left=expresion op=('+' | '-') right=expresion      # BinaryExp
+    | left=expresion op=('<' | '<=' | '>' | '>=') right=expresion # BinaryExp
+    | left=expresion op=('==' | '!=') right=expresion     # BinaryExp
+    | left=expresion op='&&' right=expresion              # BinaryExp
+    | left=expresion op='||' right=expresion              # BinaryExp
+    | ID                                                # id
+    | incredecre                                        # increDecreExp
+    | id_pattern '[' expresion ']'                      # indexAcceso
+    ;
+
+parametros: func_param (COMA func_param)* # ParamList;
 func_param : id_pattern #funcParam;
 
+arg_list: func_arg (COMA func_arg)* # ArgList;
+func_arg: ID var_type # FuncArg;
 
-// ===== Argumentos en las declaraciones === catch
-// -----> ArgList
-// valor type 
-arg_list: func_arg (COMMA func_arg)* # ArgList;
-func_arg: ID var_type # FuncArg; // 
-              
- 
-// === Tipos de valores simples ===
-valores : valor ;
-
-// === Subcontextos para d ===
 valor
-    : ENTERO    #valorEntero
-    | DECIMAL   #valorDecimal
-    | CADENA    #valorCadena
-    | BOOLEANO  #valorBooleano
-    | CARACTER  #valorCaracter
-    | FLOAT     #valorFloat
+    : ENTERO    # valorEntero
+    | FLOAT     # valorFloat
+    | CADENA    # valorCadena
+    | BOOLEANO  # valorBooleano
     ;
 
-// ===== STRUCTS ==== catch
-// * Structs
-
-/*  struct id { 
-    tipo id : variosTipos;
-    ...
-} 
-*/
-
-// Instancia de Struct
-strct_instancia: 'struct' ID LCOR struct_prop* RCOR # StructInstancia;
-
-/*
-miInstancia = Persona{
- Nombre: "Alice",
- Edad: 25,
- EsEstudiante: false,
-}
- */
+strct_instancia: 'struct' ID LLA_IZQ struct_prop* LLA_DER # StructInstancia;
 
 struct_prop:
-//nuevo:
-var_type ID (COLON)? (expresion)? (COMMA)?	# StructAttr
+    var_type ID D_PUNTO? (expresion)? (COMA)?    # StructAttr
+    ;
 
-	//var_type ID ASSIGN ID LCOR (ID COLON expresion COMMA) RCOR 	# StructAttr
-;
-// tipos de primitivos que puede ser un struct catch
 var_type
     : 'int'     # IntType
     | 'float'   # FloatType
@@ -232,100 +129,64 @@ var_type
     | 'void'    # VoidType
     ;
 
-struct_vector: LBRACK ID RBRACK LPAREN RPAREN # StructVector;
-
-// === Incremento / Decremento ===
 incredecre
-    : ID INC    #incremento
-    | ID DEC    #decremento
-    | ID INC2 expresion #incremento2
-    | ID DEC2 expresion #decremento2
+    : ID INC    # incremento
+    | ID DEC    # decremento
     ;
 
-// === Tokens de palabras clave ===
-LEN     : 'len' ;
-CAP     : 'cap' ;
-APPEND  : 'append' ;
-MUT     : 'mut' ;
-// === Literales ===
-BOOLEANO : 'true' | 'false' ;
-ENTERO   : [0-9]+ ;
-FLOAT    : [0-9]+ '.' [0-9]* | [0-9]* '.' [0-9]+ ;
-DECIMAL  : [0-9]+ '.' [0-9]+ ;
-CADENA   : '"' (~["\\] | '\\' .)* '"' ;
-CARACTER : '\'' . '\'' ;
 
+// === Reglas del Lexer ===
 
+// Palabras Clave
+MUT: 'mut';
+VAR: 'var';
+PRINT: 'print';
+PRINTLN: 'println';
+IF: 'if';
+ELSE: 'else';
+SWITCH: 'switch';
+CASE: 'case';
+DEFAULT: 'default';
+BREAK: 'break';
+FOR: 'for';
+FN: 'fn';
+RETURN: 'return';
 
+// Literales e Identificadores
+ID:         [a-zA-Z_][a-zA-Z_0-9]*;
+FLOAT:      [0-9]+ '.' [0-9]+;
+ENTERO:     [0-9]+;
+CADENA:     '"' (ESC | ~["\\])* '"';
+BOOLEANO:   'true' | 'false';
 
-IF_KW : 'if' ;
-ELSE_KW : 'else' ;
-WHILE_KW : 'while' ;
-FOR_KW : 'for' ;
-IN_KW : 'in' ;
-RETURN_KW : 'return' ;
-SWITCH_KW : 'switch';
-CASE_KW  : 'case';
-DEFAULT  : 'default';
+// Operadores y Puntuación
+ASIGN:      '=';
+SUM:        '+';
+RESTA:      '-';
+MUL:        '*';
+DIV:        '/';
+MAYOR:      '>';
+MENOR:      '<';
+MAYOR_IGUAL:'>=';
+MENOR_IGUAL:'<=';
+IGUAL:      '==';
+DIFERENTE:  '!=';
+AND:        '&&';
+OR:         '||';
+INC:        '++';
+DEC:        '--';
+PUNTO_COMA: ';';
+COMA:       ',';
+D_PUNTO:    ':';
+PAR_IZQ:    '(';
+PAR_DER:    ')';
+LLA_IZQ:    '{';
+LLA_DER:    '}';
 
-BREAK_KW : 'break' ;
-CONTINUE_KW : 'continue' ;
-FN_KW : 'fn' ;
-MAIN_KW : 'main' ;
+// Comentarios y Espacios en Blanco
+COMENTARIO_LINEA: '#' ~[\r\n]* -> skip;
+COMENTARIO_BLOQUE: '/*' .*? '*/' -> skip;
+WS:         [ \t\r\n]+ -> skip;
 
-ATOI_KW : 'Atoi';
-PARSEFLOAT_KW :'parse_float';
-TYPEOF_KW : 'TypeOf';
-
-INDEX_KW : 'indexOf';
-JOIN_KW :'join';
-//LONGITUD_KW :'len' ;
-
-// === Operadores ===
-PLUS    : '+' ;
-MINUS   : '-' ;
-MUL     : '*' ;
-DIV     : '/' ;
-MOD     : '%' ;
-NOT     : '!' ;
-OR      : '||' ;
-AND     : '&&' ;
-EQ      : '==' ;
-NEQ     : '!=' ;
-LT      : '<' ;
-LE      : '<=' ;
-GT      : '>' ;
-GE      : '>=' ;
-ASSIGN  : '=' ;
-INC     : '++' ;
-DEC     : '--' ;
-INC2    : '+=' ;
-DEC2    : '-=' ;
-COLON  : ':' ;
-PYC     : ';' ;
-
-// === Símbolos ===
-LPAREN  : '(' ;
-RPAREN  : ')' ;
-LBRACK  : '[' ;
-LCOR  : '{' ;
-RBRACK  : ']' ;
-RCOR  : '}' ;
-DOT     : '.' ;
-COMMA   : ',' ;
-
-// === Identificadores ===
-ID : [a-zA-Z_][a-zA-Z0-9_]* ;
-
-// === Espacios y comentarios ===
-WS : [ \t\r\n]+ -> skip ;
-LINE_COMMENT  : '//' ~[\r\n]* -> skip ;
-BLOCK_COMMENT : '/*' .*? '*/' -> skip ;
-
-/*
-
-Gramatica -> Expresiones -> Declaraciones -> Asignaciones -> Println ->
--> Sentencias de Control -> Funciones -> Sentencias de Transferencia -> 
--> Structs -> Slices
-
- */
+// Fragmentos
+fragment ESC: '\\' (["\\/bfnrt] | 'u' [0-9a-fA-F]{4});

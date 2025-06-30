@@ -1,4 +1,4 @@
-// Code generated from parser/Vlang.g4 by ANTLR 4.13.2. DO NOT EDIT.
+// Code generated from parser/Vlang.g4 by ANTLR 4.13.1. DO NOT EDIT.
 
 package compiler // Vlang
 import "github.com/antlr4-go/antlr/v4"
@@ -31,6 +31,12 @@ func (s *BaseVlangListener) EnterStmt(ctx *StmtContext) {}
 
 // ExitStmt is called when production stmt is exited.
 func (s *BaseVlangListener) ExitStmt(ctx *StmtContext) {}
+
+// EnterBlockStmt is called when production BlockStmt is entered.
+func (s *BaseVlangListener) EnterBlockStmt(ctx *BlockStmtContext) {}
+
+// ExitBlockStmt is called when production BlockStmt is exited.
+func (s *BaseVlangListener) ExitBlockStmt(ctx *BlockStmtContext) {}
 
 // EnterIfStmt is called when production IfStmt is entered.
 func (s *BaseVlangListener) EnterIfStmt(ctx *IfStmtContext) {}
@@ -68,10 +74,10 @@ func (s *BaseVlangListener) EnterWhileStmt(ctx *WhileStmtContext) {}
 // ExitWhileStmt is called when production WhileStmt is exited.
 func (s *BaseVlangListener) ExitWhileStmt(ctx *WhileStmtContext) {}
 
-// EnterClasicFor is called when production clasicFor is entered.
+// EnterClasicFor is called when production ClasicFor is entered.
 func (s *BaseVlangListener) EnterClasicFor(ctx *ClasicForContext) {}
 
-// ExitClasicFor is called when production clasicFor is exited.
+// ExitClasicFor is called when production ClasicFor is exited.
 func (s *BaseVlangListener) ExitClasicFor(ctx *ClasicForContext) {}
 
 // EnterForStmt is called when production ForStmt is entered.
@@ -152,17 +158,17 @@ func (s *BaseVlangListener) EnterDirectAssign(ctx *DirectAssignContext) {}
 // ExitDirectAssign is called when production DirectAssign is exited.
 func (s *BaseVlangListener) ExitDirectAssign(ctx *DirectAssignContext) {}
 
-// EnterDeclAssign is called when production DeclAssign is entered.
-func (s *BaseVlangListener) EnterDeclAssign(ctx *DeclAssignContext) {}
+// EnterDeclAssignInferred is called when production DeclAssignInferred is entered.
+func (s *BaseVlangListener) EnterDeclAssignInferred(ctx *DeclAssignInferredContext) {}
 
-// ExitDeclAssign is called when production DeclAssign is exited.
-func (s *BaseVlangListener) ExitDeclAssign(ctx *DeclAssignContext) {}
+// ExitDeclAssignInferred is called when production DeclAssignInferred is exited.
+func (s *BaseVlangListener) ExitDeclAssignInferred(ctx *DeclAssignInferredContext) {}
 
-// EnterDeclAssignType is called when production DeclAssignType is entered.
-func (s *BaseVlangListener) EnterDeclAssignType(ctx *DeclAssignTypeContext) {}
+// EnterDeclAssignExplicit is called when production DeclAssignExplicit is entered.
+func (s *BaseVlangListener) EnterDeclAssignExplicit(ctx *DeclAssignExplicitContext) {}
 
-// ExitDeclAssignType is called when production DeclAssignType is exited.
-func (s *BaseVlangListener) ExitDeclAssignType(ctx *DeclAssignTypeContext) {}
+// ExitDeclAssignExplicit is called when production DeclAssignExplicit is exited.
+func (s *BaseVlangListener) ExitDeclAssignExplicit(ctx *DeclAssignExplicitContext) {}
 
 // EnterListExpressions is called when production ListExpressions is entered.
 func (s *BaseVlangListener) EnterListExpressions(ctx *ListExpressionsContext) {}
@@ -176,77 +182,11 @@ func (s *BaseVlangListener) EnterIdPattern(ctx *IdPatternContext) {}
 // ExitIdPattern is called when production IdPattern is exited.
 func (s *BaseVlangListener) ExitIdPattern(ctx *IdPatternContext) {}
 
-// EnterIncredecr is called when production incredecr is entered.
-func (s *BaseVlangListener) EnterIncredecr(ctx *IncredecrContext) {}
+// EnterUnarioExpresion is called when production unarioExpresion is entered.
+func (s *BaseVlangListener) EnterUnarioExpresion(ctx *UnarioExpresionContext) {}
 
-// ExitIncredecr is called when production incredecr is exited.
-func (s *BaseVlangListener) ExitIncredecr(ctx *IncredecrContext) {}
-
-// EnterFn_lenx is called when production fn_lenx is entered.
-func (s *BaseVlangListener) EnterFn_lenx(ctx *Fn_lenxContext) {}
-
-// ExitFn_lenx is called when production fn_lenx is exited.
-func (s *BaseVlangListener) ExitFn_lenx(ctx *Fn_lenxContext) {}
-
-// EnterValorexpresion is called when production valorexpresion is entered.
-func (s *BaseVlangListener) EnterValorexpresion(ctx *ValorexpresionContext) {}
-
-// ExitValorexpresion is called when production valorexpresion is exited.
-func (s *BaseVlangListener) ExitValorexpresion(ctx *ValorexpresionContext) {}
-
-// EnterAsignacionfor is called when production asignacionfor is entered.
-func (s *BaseVlangListener) EnterAsignacionfor(ctx *AsignacionforContext) {}
-
-// ExitAsignacionfor is called when production asignacionfor is exited.
-func (s *BaseVlangListener) ExitAsignacionfor(ctx *AsignacionforContext) {}
-
-// EnterExpdotexp is called when production expdotexp is entered.
-func (s *BaseVlangListener) EnterExpdotexp(ctx *ExpdotexpContext) {}
-
-// ExitExpdotexp is called when production expdotexp is exited.
-func (s *BaseVlangListener) ExitExpdotexp(ctx *ExpdotexpContext) {}
-
-// EnterFn_typeOF is called when production fn_typeOF is entered.
-func (s *BaseVlangListener) EnterFn_typeOF(ctx *Fn_typeOFContext) {}
-
-// ExitFn_typeOF is called when production fn_typeOF is exited.
-func (s *BaseVlangListener) ExitFn_typeOF(ctx *Fn_typeOFContext) {}
-
-// EnterBinaryExp is called when production BinaryExp is entered.
-func (s *BaseVlangListener) EnterBinaryExp(ctx *BinaryExpContext) {}
-
-// ExitBinaryExp is called when production BinaryExp is exited.
-func (s *BaseVlangListener) ExitBinaryExp(ctx *BinaryExpContext) {}
-
-// EnterCorchetesexpre is called when production corchetesexpre is entered.
-func (s *BaseVlangListener) EnterCorchetesexpre(ctx *CorchetesexpreContext) {}
-
-// ExitCorchetesexpre is called when production corchetesexpre is exited.
-func (s *BaseVlangListener) ExitCorchetesexpre(ctx *CorchetesexpreContext) {}
-
-// EnterFuncionexpre is called when production funcionexpre is entered.
-func (s *BaseVlangListener) EnterFuncionexpre(ctx *FuncionexpreContext) {}
-
-// ExitFuncionexpre is called when production funcionexpre is exited.
-func (s *BaseVlangListener) ExitFuncionexpre(ctx *FuncionexpreContext) {}
-
-// EnterUnario is called when production unario is entered.
-func (s *BaseVlangListener) EnterUnario(ctx *UnarioContext) {}
-
-// ExitUnario is called when production unario is exited.
-func (s *BaseVlangListener) ExitUnario(ctx *UnarioContext) {}
-
-// EnterParentesisexpre is called when production parentesisexpre is entered.
-func (s *BaseVlangListener) EnterParentesisexpre(ctx *ParentesisexpreContext) {}
-
-// ExitParentesisexpre is called when production parentesisexpre is exited.
-func (s *BaseVlangListener) ExitParentesisexpre(ctx *ParentesisexpreContext) {}
-
-// EnterFn_parsefloat is called when production fn_parsefloat is entered.
-func (s *BaseVlangListener) EnterFn_parsefloat(ctx *Fn_parsefloatContext) {}
-
-// ExitFn_parsefloat is called when production fn_parsefloat is exited.
-func (s *BaseVlangListener) ExitFn_parsefloat(ctx *Fn_parsefloatContext) {}
+// ExitUnarioExpresion is called when production unarioExpresion is exited.
+func (s *BaseVlangListener) ExitUnarioExpresion(ctx *UnarioExpresionContext) {}
 
 // EnterIndexAcceso is called when production indexAcceso is entered.
 func (s *BaseVlangListener) EnterIndexAcceso(ctx *IndexAccesoContext) {}
@@ -254,35 +194,41 @@ func (s *BaseVlangListener) EnterIndexAcceso(ctx *IndexAccesoContext) {}
 // ExitIndexAcceso is called when production indexAcceso is exited.
 func (s *BaseVlangListener) ExitIndexAcceso(ctx *IndexAccesoContext) {}
 
+// EnterValorExpresion is called when production valorExpresion is entered.
+func (s *BaseVlangListener) EnterValorExpresion(ctx *ValorExpresionContext) {}
+
+// ExitValorExpresion is called when production valorExpresion is exited.
+func (s *BaseVlangListener) ExitValorExpresion(ctx *ValorExpresionContext) {}
+
+// EnterFuncionExpresion is called when production funcionExpresion is entered.
+func (s *BaseVlangListener) EnterFuncionExpresion(ctx *FuncionExpresionContext) {}
+
+// ExitFuncionExpresion is called when production funcionExpresion is exited.
+func (s *BaseVlangListener) ExitFuncionExpresion(ctx *FuncionExpresionContext) {}
+
+// EnterParentesisExpresion is called when production parentesisExpresion is entered.
+func (s *BaseVlangListener) EnterParentesisExpresion(ctx *ParentesisExpresionContext) {}
+
+// ExitParentesisExpresion is called when production parentesisExpresion is exited.
+func (s *BaseVlangListener) ExitParentesisExpresion(ctx *ParentesisExpresionContext) {}
+
 // EnterId is called when production id is entered.
 func (s *BaseVlangListener) EnterId(ctx *IdContext) {}
 
 // ExitId is called when production id is exited.
 func (s *BaseVlangListener) ExitId(ctx *IdContext) {}
 
-// EnterExpdotexp1 is called when production expdotexp1 is entered.
-func (s *BaseVlangListener) EnterExpdotexp1(ctx *Expdotexp1Context) {}
+// EnterIncreDecreExp is called when production increDecreExp is entered.
+func (s *BaseVlangListener) EnterIncreDecreExp(ctx *IncreDecreExpContext) {}
 
-// ExitExpdotexp1 is called when production expdotexp1 is exited.
-func (s *BaseVlangListener) ExitExpdotexp1(ctx *Expdotexp1Context) {}
+// ExitIncreDecreExp is called when production increDecreExp is exited.
+func (s *BaseVlangListener) ExitIncreDecreExp(ctx *IncreDecreExpContext) {}
 
-// EnterFn_indexOf is called when production fn_indexOf is entered.
-func (s *BaseVlangListener) EnterFn_indexOf(ctx *Fn_indexOfContext) {}
+// EnterBinaryExp is called when production BinaryExp is entered.
+func (s *BaseVlangListener) EnterBinaryExp(ctx *BinaryExpContext) {}
 
-// ExitFn_indexOf is called when production fn_indexOf is exited.
-func (s *BaseVlangListener) ExitFn_indexOf(ctx *Fn_indexOfContext) {}
-
-// EnterFn_join is called when production fn_join is entered.
-func (s *BaseVlangListener) EnterFn_join(ctx *Fn_joinContext) {}
-
-// ExitFn_join is called when production fn_join is exited.
-func (s *BaseVlangListener) ExitFn_join(ctx *Fn_joinContext) {}
-
-// EnterFn_atoi is called when production fn_atoi is entered.
-func (s *BaseVlangListener) EnterFn_atoi(ctx *Fn_atoiContext) {}
-
-// ExitFn_atoi is called when production fn_atoi is exited.
-func (s *BaseVlangListener) ExitFn_atoi(ctx *Fn_atoiContext) {}
+// ExitBinaryExp is called when production BinaryExp is exited.
+func (s *BaseVlangListener) ExitBinaryExp(ctx *BinaryExpContext) {}
 
 // EnterParamList is called when production ParamList is entered.
 func (s *BaseVlangListener) EnterParamList(ctx *ParamListContext) {}
@@ -308,23 +254,17 @@ func (s *BaseVlangListener) EnterFuncArg(ctx *FuncArgContext) {}
 // ExitFuncArg is called when production FuncArg is exited.
 func (s *BaseVlangListener) ExitFuncArg(ctx *FuncArgContext) {}
 
-// EnterValores is called when production valores is entered.
-func (s *BaseVlangListener) EnterValores(ctx *ValoresContext) {}
-
-// ExitValores is called when production valores is exited.
-func (s *BaseVlangListener) ExitValores(ctx *ValoresContext) {}
-
 // EnterValorEntero is called when production valorEntero is entered.
 func (s *BaseVlangListener) EnterValorEntero(ctx *ValorEnteroContext) {}
 
 // ExitValorEntero is called when production valorEntero is exited.
 func (s *BaseVlangListener) ExitValorEntero(ctx *ValorEnteroContext) {}
 
-// EnterValorDecimal is called when production valorDecimal is entered.
-func (s *BaseVlangListener) EnterValorDecimal(ctx *ValorDecimalContext) {}
+// EnterValorFloat is called when production valorFloat is entered.
+func (s *BaseVlangListener) EnterValorFloat(ctx *ValorFloatContext) {}
 
-// ExitValorDecimal is called when production valorDecimal is exited.
-func (s *BaseVlangListener) ExitValorDecimal(ctx *ValorDecimalContext) {}
+// ExitValorFloat is called when production valorFloat is exited.
+func (s *BaseVlangListener) ExitValorFloat(ctx *ValorFloatContext) {}
 
 // EnterValorCadena is called when production valorCadena is entered.
 func (s *BaseVlangListener) EnterValorCadena(ctx *ValorCadenaContext) {}
@@ -337,18 +277,6 @@ func (s *BaseVlangListener) EnterValorBooleano(ctx *ValorBooleanoContext) {}
 
 // ExitValorBooleano is called when production valorBooleano is exited.
 func (s *BaseVlangListener) ExitValorBooleano(ctx *ValorBooleanoContext) {}
-
-// EnterValorCaracter is called when production valorCaracter is entered.
-func (s *BaseVlangListener) EnterValorCaracter(ctx *ValorCaracterContext) {}
-
-// ExitValorCaracter is called when production valorCaracter is exited.
-func (s *BaseVlangListener) ExitValorCaracter(ctx *ValorCaracterContext) {}
-
-// EnterValorFloat is called when production valorFloat is entered.
-func (s *BaseVlangListener) EnterValorFloat(ctx *ValorFloatContext) {}
-
-// ExitValorFloat is called when production valorFloat is exited.
-func (s *BaseVlangListener) ExitValorFloat(ctx *ValorFloatContext) {}
 
 // EnterStructInstancia is called when production StructInstancia is entered.
 func (s *BaseVlangListener) EnterStructInstancia(ctx *StructInstanciaContext) {}
@@ -398,12 +326,6 @@ func (s *BaseVlangListener) EnterVoidType(ctx *VoidTypeContext) {}
 // ExitVoidType is called when production VoidType is exited.
 func (s *BaseVlangListener) ExitVoidType(ctx *VoidTypeContext) {}
 
-// EnterStructVector is called when production StructVector is entered.
-func (s *BaseVlangListener) EnterStructVector(ctx *StructVectorContext) {}
-
-// ExitStructVector is called when production StructVector is exited.
-func (s *BaseVlangListener) ExitStructVector(ctx *StructVectorContext) {}
-
 // EnterIncremento is called when production incremento is entered.
 func (s *BaseVlangListener) EnterIncremento(ctx *IncrementoContext) {}
 
@@ -415,15 +337,3 @@ func (s *BaseVlangListener) EnterDecremento(ctx *DecrementoContext) {}
 
 // ExitDecremento is called when production decremento is exited.
 func (s *BaseVlangListener) ExitDecremento(ctx *DecrementoContext) {}
-
-// EnterIncremento2 is called when production incremento2 is entered.
-func (s *BaseVlangListener) EnterIncremento2(ctx *Incremento2Context) {}
-
-// ExitIncremento2 is called when production incremento2 is exited.
-func (s *BaseVlangListener) ExitIncremento2(ctx *Incremento2Context) {}
-
-// EnterDecremento2 is called when production decremento2 is entered.
-func (s *BaseVlangListener) EnterDecremento2(ctx *Decremento2Context) {}
-
-// ExitDecremento2 is called when production decremento2 is exited.
-func (s *BaseVlangListener) ExitDecremento2(ctx *Decremento2Context) {}

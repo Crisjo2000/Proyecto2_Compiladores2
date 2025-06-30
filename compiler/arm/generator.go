@@ -13,6 +13,7 @@ const (
 	FloatType
 	StringType
 	BoolType
+	VoidType
 )
 
 type StackObject struct {
@@ -178,19 +179,25 @@ func (ag *ArmGenerator) NewScope() {
 
 func (ag *ArmGenerator) EndScope() int {
 	byteOffset := 0
-	for i := len(ag.stack) - 1; i >= 0; i-- {
+	i := len(ag.stack) - 1
+	for i >= 0 {
 		if ag.stack[i].Depth == ag.depth {
 			byteOffset += ag.stack[i].Length
+			// Remove element
 			ag.stack = append(ag.stack[:i], ag.stack[i+1:]...)
 		} else {
 			break
 		}
+		i--
 	}
 	ag.depth--
 	return byteOffset
 }
 
 func (ag *ArmGenerator) TagObject(id string) {
+	if len(ag.stack) == 0 {
+		panic("TagObject() called on empty stack")
+	}
 	last := ag.stack[len(ag.stack)-1]
 	last.Id = &id
 	ag.stack[len(ag.stack)-1] = last
@@ -231,6 +238,10 @@ func (a *ArmGenerator) Str(rs1, rs2 string, offset int) {
 	a.instructions = append(a.instructions, fmt.Sprintf("STR %s, [%s, #%d]", rs1, rs2, offset))
 }
 
+func (a *ArmGenerator) Fstr(rs1, rs2 string, offset int) {
+	a.instructions = append(a.instructions, fmt.Sprintf("FSTR %s, [%s, #%d]", rs1, rs2, offset))
+}
+
 func (a *ArmGenerator) Strb(rs1, rs2 string) {
 	a.instructions = append(a.instructions, fmt.Sprintf("STRB %s, [%s]", rs1, rs2))
 }
@@ -239,8 +250,16 @@ func (a *ArmGenerator) Ldr(rd, rs1 string, offset int) {
 	a.instructions = append(a.instructions, fmt.Sprintf("LDR %s, [%s, #%d]", rd, rs1, offset))
 }
 
+func (a *ArmGenerator) Fldr(rd, rs1 string, offset int) {
+	a.instructions = append(a.instructions, fmt.Sprintf("FLDR %s, [%s, #%d]", rd, rs1, offset))
+}
+
 func (a *ArmGenerator) Mov(rd string, imm int) {
 	a.instructions = append(a.instructions, fmt.Sprintf("MOV %s, #%d", rd, imm))
+}
+
+func (a *ArmGenerator) MovReg(rd, rs string) {
+	a.instructions = append(a.instructions, fmt.Sprintf("MOV %s, %s", rd, rs))
 }
 
 // cod comentado 28/06
@@ -278,6 +297,10 @@ func (c *ArmGenerator) Fmul(rd, rs1, rs2 string) {
 
 func (c *ArmGenerator) Fdiv(rd, rs1, rs2 string) {
 	c.instructions = append(c.instructions, fmt.Sprintf("FDIV %s, %s, %s", rd, rs1, rs2))
+}
+
+func (c *ArmGenerator) Fcmp(rs1, rs2 string) {
+	c.instructions = append(c.instructions, fmt.Sprintf("FCMP %s, %s", rs1, rs2))
 }
 
 func (gen *ArmGenerator) B(label string) {

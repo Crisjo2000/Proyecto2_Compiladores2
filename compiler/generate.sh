@@ -2,7 +2,7 @@
 
 echo "[INFO] Ejecutando ANTLR4 directamente con el .jar..."
 
-JAR="antlr-4.13.2-complete.jar"
+JAR="antlr4-4.13.1-complete.jar"
 
 # Verifica que el archivo exista
 if [ ! -f "$JAR" ]; then

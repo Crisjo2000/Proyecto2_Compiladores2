@@ -1,4 +1,4 @@
-// Code generated from parser/Vlang.g4 by ANTLR 4.13.2. DO NOT EDIT.
+// Code generated from parser/Vlang.g4 by ANTLR 4.13.1. DO NOT EDIT.
 
 package compiler // Vlang
 import "github.com/antlr4-go/antlr/v4"
@@ -12,6 +12,10 @@ func (v *BaseVlangVisitor) VisitPrograma(ctx *ProgramaContext) interface{} {
 }
 
 func (v *BaseVlangVisitor) VisitStmt(ctx *StmtContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseVlangVisitor) VisitBlockStmt(ctx *BlockStmtContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
@@ -95,11 +99,11 @@ func (v *BaseVlangVisitor) VisitDirectAssign(ctx *DirectAssignContext) interface
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseVlangVisitor) VisitDeclAssign(ctx *DeclAssignContext) interface{} {
+func (v *BaseVlangVisitor) VisitDeclAssignInferred(ctx *DeclAssignInferredContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseVlangVisitor) VisitDeclAssignType(ctx *DeclAssignTypeContext) interface{} {
+func (v *BaseVlangVisitor) VisitDeclAssignExplicit(ctx *DeclAssignExplicitContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
@@ -111,51 +115,7 @@ func (v *BaseVlangVisitor) VisitIdPattern(ctx *IdPatternContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseVlangVisitor) VisitIncredecr(ctx *IncredecrContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseVlangVisitor) VisitFn_lenx(ctx *Fn_lenxContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseVlangVisitor) VisitValorexpresion(ctx *ValorexpresionContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseVlangVisitor) VisitAsignacionfor(ctx *AsignacionforContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseVlangVisitor) VisitExpdotexp(ctx *ExpdotexpContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseVlangVisitor) VisitFn_typeOF(ctx *Fn_typeOFContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseVlangVisitor) VisitBinaryExp(ctx *BinaryExpContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseVlangVisitor) VisitCorchetesexpre(ctx *CorchetesexpreContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseVlangVisitor) VisitFuncionexpre(ctx *FuncionexpreContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseVlangVisitor) VisitUnario(ctx *UnarioContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseVlangVisitor) VisitParentesisexpre(ctx *ParentesisexpreContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseVlangVisitor) VisitFn_parsefloat(ctx *Fn_parsefloatContext) interface{} {
+func (v *BaseVlangVisitor) VisitUnarioExpresion(ctx *UnarioExpresionContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
@@ -163,23 +123,27 @@ func (v *BaseVlangVisitor) VisitIndexAcceso(ctx *IndexAccesoContext) interface{}
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseVlangVisitor) VisitValorExpresion(ctx *ValorExpresionContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseVlangVisitor) VisitFuncionExpresion(ctx *FuncionExpresionContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseVlangVisitor) VisitParentesisExpresion(ctx *ParentesisExpresionContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseVlangVisitor) VisitId(ctx *IdContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseVlangVisitor) VisitExpdotexp1(ctx *Expdotexp1Context) interface{} {
+func (v *BaseVlangVisitor) VisitIncreDecreExp(ctx *IncreDecreExpContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseVlangVisitor) VisitFn_indexOf(ctx *Fn_indexOfContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseVlangVisitor) VisitFn_join(ctx *Fn_joinContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseVlangVisitor) VisitFn_atoi(ctx *Fn_atoiContext) interface{} {
+func (v *BaseVlangVisitor) VisitBinaryExp(ctx *BinaryExpContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
@@ -199,15 +163,11 @@ func (v *BaseVlangVisitor) VisitFuncArg(ctx *FuncArgContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseVlangVisitor) VisitValores(ctx *ValoresContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
 func (v *BaseVlangVisitor) VisitValorEntero(ctx *ValorEnteroContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseVlangVisitor) VisitValorDecimal(ctx *ValorDecimalContext) interface{} {
+func (v *BaseVlangVisitor) VisitValorFloat(ctx *ValorFloatContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
@@ -216,14 +176,6 @@ func (v *BaseVlangVisitor) VisitValorCadena(ctx *ValorCadenaContext) interface{}
 }
 
 func (v *BaseVlangVisitor) VisitValorBooleano(ctx *ValorBooleanoContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseVlangVisitor) VisitValorCaracter(ctx *ValorCaracterContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseVlangVisitor) VisitValorFloat(ctx *ValorFloatContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
@@ -259,22 +211,10 @@ func (v *BaseVlangVisitor) VisitVoidType(ctx *VoidTypeContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseVlangVisitor) VisitStructVector(ctx *StructVectorContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
 func (v *BaseVlangVisitor) VisitIncremento(ctx *IncrementoContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
 func (v *BaseVlangVisitor) VisitDecremento(ctx *DecrementoContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseVlangVisitor) VisitIncremento2(ctx *Incremento2Context) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseVlangVisitor) VisitDecremento2(ctx *Decremento2Context) interface{} {
 	return v.VisitChildren(ctx)
 }
