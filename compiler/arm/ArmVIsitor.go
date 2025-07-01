@@ -83,7 +83,8 @@ func (v *ArmVisitor) Visit(tree antlr.ParseTree) interface{} {
 		return v.VisitFuncDecl(node)
 	case *compiler.DeclAssignTypeContext:
 		return v.VisitDeclAssignType(node)
-
+	case *compiler.Decl_stmtContext:
+		return v.VisitDeclStmt(node)
 	default:
 		fmt.Printf("⚠️ Tipo inesperado en Visit(): %T\n", tree)
 		return tree.Accept(v)
@@ -135,7 +136,7 @@ func (v *ArmVisitor) VisitPrograma(ctx *compiler.ProgramaContext) interface{} {
 		v.Visit(stmt)
 	}
 
-	// Finalizar el programa correctamente
+	// Finalizar el programa correctamente (solo una vez)
 	v.Generator.Comment("Fin del programa - exit syscall")
 	v.Generator.instructions = append(v.Generator.instructions, "MOV X0, #0")
 	v.Generator.instructions = append(v.Generator.instructions, "MOV X8, #93")
@@ -162,7 +163,7 @@ func (v *ArmVisitor) VisitPrintlnStmt(ctx *compiler.PrintlnStmtContext) interfac
 			v.Generator.PopObject(X0)
 			v.Generator.PrintInteger(X0)
 		case StringType:
-			v.Generator.PopObject(X0)
+			v.Generator.PopObject(X0) // Recupera la dirección base del string
 			v.Generator.PrintString(X0)
 		case FloatType:
 			v.Generator.PopObject(D0)
@@ -422,6 +423,92 @@ func (v *ArmVisitor) VisitBinaryExp(ctx *compiler.BinaryExpContext) interface{} 
 			return nil
 		}
 		fmt.Println("Error: combinación de tipos inválida para módulo")
+		return nil
+	}
+
+	// Operaciones relacionales
+	if operation == "==" || operation == "!=" || operation == "<" || operation == ">" || operation == "<=" || operation == ">=" {
+		// int y float64
+		if (leftType == IntType || leftType == FloatType) && (rightType == IntType || rightType == FloatType) {
+			// Convertir ambos a float si alguno es float
+			if leftType == IntType {
+				v.Generator.Scvtf(D0, X0)
+			} else {
+				v.Generator.Fmov(D0, X0)
+			}
+			if rightType == IntType {
+				v.Generator.Scvtf(D1, X1)
+			} else {
+				v.Generator.Fmov(D1, X1)
+			}
+			// Comparar D0 y D1
+			v.Generator.instructions = append(v.Generator.instructions, "FCMP D0, D1")
+			trueLabel := v.Generator.GetLabel()
+			endLabel := v.Generator.GetLabel()
+			cmpInstr := map[string]string{"==": "BEQ", "!=": "BNE", "<": "BLT", ">": "BGT", "<=": "BLE", ">=": "BGE"}[operation]
+			v.Generator.Mov(X0, 0)
+			v.Generator.instructions = append(v.Generator.instructions, cmpInstr+" "+trueLabel)
+			v.Generator.B(endLabel)
+			v.Generator.SetLabel(trueLabel)
+			v.Generator.Mov(X0, 1)
+			v.Generator.SetLabel(endLabel)
+			v.Generator.Push(X0)
+			v.Generator.PushObject(v.Generator.BoolObject())
+			return nil
+		}
+		// string: comparar direcciones (por ahora)
+		if leftType == StringType && rightType == StringType {
+			v.Generator.Cmp(X0, X1)
+			trueLabel := v.Generator.GetLabel()
+			endLabel := v.Generator.GetLabel()
+			if operation == "==" {
+				v.Generator.Mov(X0, 0)
+				v.Generator.instructions = append(v.Generator.instructions, "BEQ "+trueLabel)
+			} else if operation == "!=" {
+				v.Generator.Mov(X0, 0)
+				v.Generator.instructions = append(v.Generator.instructions, "BNE "+trueLabel)
+			}
+			v.Generator.B(endLabel)
+			v.Generator.SetLabel(trueLabel)
+			v.Generator.Mov(X0, 1)
+			v.Generator.SetLabel(endLabel)
+			v.Generator.Push(X0)
+			v.Generator.PushObject(v.Generator.BoolObject())
+			return nil
+		}
+		// bool
+		if leftType == BoolType && rightType == BoolType {
+			v.Generator.Cmp(X0, X1)
+			trueLabel := v.Generator.GetLabel()
+			endLabel := v.Generator.GetLabel()
+			if operation == "==" {
+				v.Generator.Mov(X0, 0)
+				v.Generator.instructions = append(v.Generator.instructions, "BEQ "+trueLabel)
+			} else if operation == "!=" {
+				v.Generator.Mov(X0, 0)
+				v.Generator.instructions = append(v.Generator.instructions, "BNE "+trueLabel)
+			}
+			v.Generator.B(endLabel)
+			v.Generator.SetLabel(trueLabel)
+			v.Generator.Mov(X0, 1)
+			v.Generator.SetLabel(endLabel)
+			v.Generator.Push(X0)
+			v.Generator.PushObject(v.Generator.BoolObject())
+			return nil
+		}
+		fmt.Println("Error: combinación de tipos inválida para operación relacional")
+		return nil
+	}
+
+	// Operaciones lógicas
+	if operation == "&&" || operation == "||" {
+		if leftType == BoolType && rightType == BoolType {
+			v.Generator.instructions = append(v.Generator.instructions, "AND X0, X0, X1")
+			v.Generator.Push(X0)
+			v.Generator.PushObject(v.Generator.BoolObject())
+			return nil
+		}
+		fmt.Println("Error: combinación de tipos inválida para operación lógica")
 		return nil
 	}
 
@@ -693,5 +780,17 @@ func (v *ArmVisitor) VisitDeclAssignType(ctx *compiler.DeclAssignTypeContext) in
 	}
 	v.Generator.PushObject(varObj)
 	v.Generator.TagObject(varName)
+	return nil
+}
+
+// Agrego el método VisitDeclStmt
+func (v *ArmVisitor) VisitDeclStmt(ctx *compiler.Decl_stmtContext) interface{} {
+	// Procesa todas las declaraciones dentro del Decl_stmt
+	for i := 0; i < ctx.GetChildCount(); i++ {
+		child := ctx.GetChild(i)
+		if parseTree, ok := child.(antlr.ParseTree); ok {
+			v.Visit(parseTree)
+		}
+	}
 	return nil
 }

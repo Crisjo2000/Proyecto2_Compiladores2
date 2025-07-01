@@ -140,6 +140,9 @@ func (ag *ArmGenerator) PushConstant(obj StackObject, value interface{}) {
 			ag.Mov(X0, 1)
 			ag.Add(HP, HP, X0)
 		}
+		ag.Comment("Pushing null terminator to heap")
+		ag.Mov("w0", 0)
+		ag.Strb("w0", HP)
 	case BoolType:
 		val := 0
 		if value.(bool) {
