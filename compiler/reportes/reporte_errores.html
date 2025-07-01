@@ -1,15 +1,68 @@
 
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>Reporte de Errores - VLang</title>
-            <style>
-                body { font-family: Arial, sans-serif; margin: 20px; }
-                .success { color: green; padding: 20px; font-size: 18px; }
-            </style>
-        </head>
-        <body>
-            <div class="success">✅ No se encontraron errores</div>
-        </body>
-        </html>
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Reporte de Errores - VLang</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 20px; }
+            h1 { color: #e74c3c; text-align: center; }
+            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+            th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+            th { background-color: #f2f2f2; }
+            .lexical { background-color: #ffebee; }
+            .syntax { background-color: #fff8e1; }
+            .semantic { background-color: #e3f2fd; }
+            .runtime { background-color: #fce4ec; }
+            .error-count { margin: 20px 0; font-weight: bold; }
+        </style>
+    </head>
+    <body>
+        <h1>Reporte de Errores</h1>
+        <div class="error-count">Total de errores: 5</div>
+        <table>
+            <tr>
+                <th>Tipo</th>
+                <th>Línea</th>
+                <th>Columna</th>
+                <th>Descripción</th>
+            </tr>
+    
+            <tr class="syntax">
+                <td>Error sintáctico</td>
+                <td>1</td>
+                <td>3</td>
+                <td>mismatched input 'main' expecting ID</td>
+            </tr>
         
+            <tr class="syntax">
+                <td>Error sintáctico</td>
+                <td>2</td>
+                <td>19</td>
+                <td>extraneous input ';' expecting {<EOF>, 'println', 'print', 'struct', 'mut', 'if', 'for', 'return', 'switch', 'break', 'continue', 'fn', ID}</td>
+            </tr>
+        
+            <tr class="syntax">
+                <td>Error sintáctico</td>
+                <td>3</td>
+                <td>20</td>
+                <td>extraneous input ';' expecting {<EOF>, 'println', 'print', 'struct', 'mut', 'if', 'for', 'return', 'switch', 'break', 'continue', 'fn', ID}</td>
+            </tr>
+        
+            <tr class="syntax">
+                <td>Error sintáctico</td>
+                <td>4</td>
+                <td>26</td>
+                <td>extraneous input ';' expecting {<EOF>, 'println', 'print', 'struct', 'mut', 'if', 'for', 'return', 'switch', 'break', 'continue', 'fn', ID}</td>
+            </tr>
+        
+            <tr class="syntax">
+                <td>Error sintáctico</td>
+                <td>5</td>
+                <td>33</td>
+                <td>extraneous input ';' expecting {<EOF>, 'println', 'print', 'struct', 'mut', 'if', 'for', 'return', 'switch', 'break', 'continue', 'fn', ID}</td>
+            </tr>
+        
+        </table>
+    </body>
+    </html>
+    

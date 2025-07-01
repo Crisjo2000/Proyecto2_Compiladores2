@@ -10,9 +10,30 @@ import (
 	"github.com/antlr4-go/antlr/v4"
 )
 
+// Estructura para variables en el visitor ARM
+// (simplificada para el generador de código)
+type ArmVariable struct {
+	Name  string
+	Type  string
+	Value interface{} // Puede ser int, float64, string, bool, nil
+}
+
+type ArmScope struct {
+	Parent    *ArmScope
+	Variables map[string]*ArmVariable
+}
+
+func NewArmScope(parent *ArmScope) *ArmScope {
+	return &ArmScope{
+		Parent:    parent,
+		Variables: make(map[string]*ArmVariable),
+	}
+}
+
 type ArmVisitor struct {
 	compiler.BaseVlangVisitor               // ReplVisitor para manejar el contexto del REPL
 	Generator                 *ArmGenerator // Generador de instrucciones ARM
+	Scope                     *ArmScope     // Scope actual
 }
 
 func (v *ArmVisitor) Visit(tree antlr.ParseTree) interface{} {
@@ -58,6 +79,10 @@ func (v *ArmVisitor) Visit(tree antlr.ParseTree) interface{} {
 		return v.VisitIfChain(node, v.Generator.GetLabel())
 	case *compiler.ElseStmtContext:
 		return v.VisitElseStmt(node)
+	case *compiler.FuncDeclContext:
+		return v.VisitFuncDecl(node)
+	case *compiler.DeclAssignTypeContext:
+		return v.VisitDeclAssignType(node)
 
 	default:
 		fmt.Printf("⚠️ Tipo inesperado en Visit(): %T\n", tree)
@@ -92,98 +117,65 @@ func NewVisitorArm() *ArmVisitor {
 			instructions: []string{},
 			stdLib:       NewStandardLibrary(), // Inicializa la biblioteca estándar
 		},
+		Scope: NewArmScope(nil), // Scope global
 	}
 }
 
 func (v *ArmVisitor) VisitPrograma(ctx *compiler.ProgramaContext) interface{} {
-
 	fmt.Println("🔍 Visitando el programa en el ARMVISITOR")
-	// Vamos a recorrer todos los statements y los visitamos
+
+	// Inicializar stack y heap al inicio del programa
+	v.Generator.Comment("Inicialización de stack y heap")
+	v.Generator.instructions = append(v.Generator.instructions, "MOV SP, #0x40000") // Stack pointer a una dirección segura
+	v.Generator.instructions = append(v.Generator.instructions, "ADR X10, heap")    // Heap pointer en X10
+
+	// Recorrer todos los statements del programa
 	for _, stmt := range ctx.AllStmt() {
 		fmt.Println("---🔍 Visitando statement*:(text)", stmt.GetText())
 		v.Visit(stmt)
 	}
 
+	// Finalizar el programa correctamente
+	v.Generator.Comment("Fin del programa - exit syscall")
+	v.Generator.instructions = append(v.Generator.instructions, "MOV X0, #0")
+	v.Generator.instructions = append(v.Generator.instructions, "MOV X8, #93")
+	v.Generator.instructions = append(v.Generator.instructions, "SVC #0")
+
 	return nil
 }
 
 func (v *ArmVisitor) VisitPrintlnStmt(ctx *compiler.PrintlnStmtContext) interface{} {
-
-	// cod agregado 28/06
 	v.Generator.Comment("Print statement")
 
+	// Evaluar todas las expresiones y guardar los tipos
+	types := make([]StackObject, 0, len(ctx.AllExpresion()))
 	for _, exp := range ctx.AllExpresion() {
 		v.Visit(exp)
+		types = append(types, v.Generator.TopObject())
 	}
 
-	// Obtener el objeto de la pila
-	var value StackObject
-	obj := v.Generator.TopObject()
-
-	// Pop con el registro correcto según el tipo
-	switch obj.Type {
-	case IntType:
-		value = v.Generator.PopObject(X0)
-		v.Generator.PrintInteger(X0)
-	case StringType:
-		value = v.Generator.PopObject(X0)
-		v.Generator.PrintString(X0)
-	case FloatType:
-		value = v.Generator.PopObject(D0)
-		v.Generator.PrintFloat()
-	case BoolType:
-		value = v.Generator.PopObject(X0)
-		v.Generator.PrintBool()
-	default:
-		fmt.Println("⚠️ Tipo no soportado para impresión:", obj.Type)
+	// Imprimir los valores en orden (de izquierda a derecha)
+	for i := len(types) - 1; i >= 0; i-- {
+		typ := types[i].Type
+		switch typ {
+		case IntType:
+			v.Generator.PopObject(X0)
+			v.Generator.PrintInteger(X0)
+		case StringType:
+			v.Generator.PopObject(X0)
+			v.Generator.PrintString(X0)
+		case FloatType:
+			v.Generator.PopObject(D0)
+			v.Generator.PrintFloat()
+		case BoolType:
+			v.Generator.PopObject(X0)
+			v.Generator.PrintBool()
+		default:
+			fmt.Println("⚠️ Tipo no soportado para impresión:", typ)
+		}
 	}
 
-	fmt.Println(value)
 	return nil
-
-	// FIN agre
-
-	// cod comentado 28/06
-	/*fmt.Println("🔍 Visitando println statement:", ctx.GetText())
-
-	v.Generator.Comment("Print statement")
-	v.Generator.Comment("Visiting expresions")
-
-	// Evaluar cada expresión (por si acaso hay más de una, aunque normalmente es una sola)
-	for _, exp := range ctx.AllExpresion() {
-		fmt.Println("---🔍 Visitando expresión:", exp.GetText())
-		v.Visit(exp)
-	}
-
-	v.Generator.Comment("Popping value to print")
-
-	// Verifica el tipo del objeto en la cima de la pila
-	isDouble := v.Generator.TopObject().Type == FloatType
-
-	// Pop con el registro correcto según el tipo
-	var value StackObject
-	if isDouble {
-		value = v.Generator.PopObject(D0)
-	} else {
-		value = v.Generator.PopObject(X0)
-	}
-
-	// Generar la instrucción de impresión según el tipo
-	switch value.Type {
-	case IntType:
-		v.Generator.PrintInteger(X0)
-	case StringType:
-		v.Generator.PrintString(X0)
-	case FloatType:
-		v.Generator.PrintFloat()
-	case BoolType:
-		v.Generator.PrintBool()
-
-	default:
-		fmt.Println("⚠️ Tipo no soportado para impresión:", value.Type)
-	}
-
-	return nil*/
 }
 
 func (v *ArmVisitor) VisitValorEntero(ctx *compiler.ValorEnteroContext) interface{} {
@@ -285,219 +277,245 @@ func (v *ArmVisitor) VisitValorExpresion(ctx *compiler.ValorexpresionContext) in
 }
 
 func (v *ArmVisitor) VisitBinaryExp(ctx *compiler.BinaryExpContext) interface{} {
+	operation := ctx.GetOp().GetText()
 
-	//--------------------------------Aritméticos-----------------------------------
-	if ctx.GetOp().GetText() == "+" || ctx.GetOp().GetText() == "-" ||
-		ctx.GetOp().GetText() == "*" || ctx.GetOp().GetText() == "/" {
-		v.Generator.Comment("Aritmetic operand")
-		var operation = ctx.GetOp().GetText()
-		v.Generator.Comment("Visiting left expression: ")
-		v.Visit(ctx.Expresion(0))
-		v.Generator.Comment("Visiting right expression: ")
-		v.Visit(ctx.Expresion(1))
+	// Visitar operandos
+	v.Visit(ctx.Expresion(0))
+	v.Visit(ctx.Expresion(1))
 
-		v.Generator.Comment("popping operands")
-		var isRightFloat = v.Generator.TopObject().Type == FloatType
-		var left StackObject
-		if isRightFloat {
-			v.Generator.PopObject(D0)
-		} else {
-			v.Generator.PopObject(X0)
-		}
+	// Obtener tipos de operandos
+	rightObj := v.Generator.PopObject(X1)
+	leftObj := v.Generator.PopObject(X0)
 
-		var isLeftFloat = v.Generator.TopObject().Type == FloatType
-		if isLeftFloat {
-			left = v.Generator.PopObject(D1)
-		} else {
-			left = v.Generator.PopObject(X1)
-		}
+	rightType := rightObj.Type
+	leftType := leftObj.Type
 
-		if isLeftFloat || isRightFloat {
-			v.Generator.Comment("Performing float operation")
-
-			if !isLeftFloat {
-				v.Generator.Scvtf(D1, X1)
-
-			}
-			if !isRightFloat {
-				v.Generator.Scvtf(D0, X0)
-			}
-
-			switch operation {
-			case "+":
-				v.Generator.Fadd(D0, D0, D1)
-			case "-":
-				v.Generator.Fsub(D0, D0, D1)
-			case "*":
-				v.Generator.Fmul(D0, D0, D1)
-			case "/":
-				v.Generator.Fdiv(D0, D0, D1)
-			}
-
-			v.Generator.Push(D0)
-			if isLeftFloat {
-				v.Generator.PushObject(v.Generator.FloatObject())
-			} else {
-				v.Generator.PushObject(v.Generator.IntObject())
-			}
-			return nil
-		}
-
-		switch operation {
-		case "+":
+	// Suma y concatenación
+	if operation == "+" {
+		if leftType == IntType && rightType == IntType {
 			v.Generator.Add(X0, X0, X1)
-		case "-":
-			v.Generator.Sub(X0, X0, X1)
-		case "*":
-			v.Generator.Mul(X0, X0, X1)
-		case "/":
-			v.Generator.Div(X0, X0, X1)
-		}
-		v.Generator.Comment("Pushing result")
-		v.Generator.Push(X0)
-		v.Generator.PushObject(v.Generator.CloneObject(left))
-
-		//-------------------------------Relacionales-----------------------------------
-	} else if ctx.GetOp().GetText() == "==" || ctx.GetOp().GetText() == "!=" ||
-		ctx.GetOp().GetText() == "<" || ctx.GetOp().GetText() == ">" ||
-		ctx.GetOp().GetText() == "<=" || ctx.GetOp().GetText() == ">=" {
-
-		v.Generator.Comment("Relational operation")
-		var operation = ctx.GetOp().GetText()
-		v.Generator.Comment("Visiting left expression: ")
-		v.Visit(ctx.Expresion(0)) // Visitar expresión izquierda
-		v.Generator.Comment("Visiting right expression: ")
-		v.Visit(ctx.Expresion(1)) // Visitar expresión derecha
-		v.Generator.Comment("Popping operands")
-
-		var isRightFloat = v.Generator.TopObject().Type == FloatType
-		if isRightFloat {
-			v.Generator.PopObject(D1)
-		} else {
-			v.Generator.PopObject(X1)
-		}
-
-		var isLeftFloat = v.Generator.TopObject().Type == FloatType
-		if isLeftFloat {
-			v.Generator.PopObject(D0)
-		} else {
-			v.Generator.PopObject(X0)
-		}
-
-		if isLeftFloat || isRightFloat {
+			v.Generator.Push(X0)
+			v.Generator.PushObject(v.Generator.IntObject())
 			return nil
 		}
-
-		v.Generator.Cmp(X1, X0)
-		v.Generator.Comment("Setting condition flags")
-
-		var truelabel = v.Generator.GetLabel()
-		var endlabel = v.Generator.GetLabel()
-
-		switch operation {
-		case "<":
-			v.Generator.Blt(truelabel)
-		case "<=":
-			v.Generator.Ble(truelabel)
-		case ">":
-			v.Generator.Bgt(truelabel)
-		case ">=":
-			v.Generator.Bge(truelabel)
-		case "==":
-			v.Generator.Beq(truelabel)
-		case "!=":
-			v.Generator.Bne(truelabel)
-		default:
-			fmt.Println("⚠️ Operación relacional no soportada:", operation)
+		if (leftType == IntType && rightType == FloatType) || (leftType == FloatType && rightType == IntType) || (leftType == FloatType && rightType == FloatType) {
+			// Conversión implícita a float
+			if leftType == IntType {
+				v.Generator.Scvtf(D0, X0)
+			} else {
+				v.Generator.Fmov(D0, X0)
+			}
+			if rightType == IntType {
+				v.Generator.Scvtf(D1, X1)
+			} else {
+				v.Generator.Fmov(D1, X1)
+			}
+			v.Generator.Fadd(D0, D0, D1)
+			v.Generator.Push(D0)
+			v.Generator.PushObject(v.Generator.FloatObject())
 			return nil
 		}
-
-		v.Generator.Mov(X0, 0)
-		v.Generator.Push(X0)
-		v.Generator.B(endlabel)
-		v.Generator.SetLabel(truelabel)
-		v.Generator.Mov(X0, 1)
-		v.Generator.Push(X0)
-		v.Generator.SetLabel(endlabel)
-
-		v.Generator.PushObject(v.Generator.BoolObject())
-		//-------------------------------Lógicos-----------------------------------
-	} else if ctx.GetOp().GetText() == "&&" || ctx.GetOp().GetText() == "||" {
-		v.Generator.Comment("Logical operation")
-		var operation = ctx.GetOp().GetText()
-
-		v.Generator.Comment("Visiting left expression: ")
-		v.Visit(ctx.Expresion(0)) // Visitar expresión izquierda
-		v.Generator.Comment("Visiting right expression: ")
-		v.Visit(ctx.Expresion(1)) // Visitar expresión derecha
-
-		v.Generator.Comment("Popping operands")
-		v.Generator.PopObject(X1)
-		//left := v.Generator.PopObject(X0)
-
-		switch operation {
-		case "&&":
+		if leftType == StringType && rightType == StringType {
+			// Concatenación de strings (simplificada: solo comentario)
+			v.Generator.Comment("Concatenación de strings no implementada (placeholder)")
+			v.Generator.PushObject(v.Generator.StringObject())
+			return nil
 		}
+		fmt.Println("Error: combinación de tipos inválida para suma/concatenación")
+		return nil
 	}
 
+	// Resta
+	if operation == "-" {
+		if leftType == IntType && rightType == IntType {
+			v.Generator.Sub(X0, X0, X1)
+			v.Generator.Push(X0)
+			v.Generator.PushObject(v.Generator.IntObject())
+			return nil
+		}
+		if (leftType == IntType && rightType == FloatType) || (leftType == FloatType && rightType == IntType) || (leftType == FloatType && rightType == FloatType) {
+			if leftType == IntType {
+				v.Generator.Scvtf(D0, X0)
+			} else {
+				v.Generator.Fmov(D0, X0)
+			}
+			if rightType == IntType {
+				v.Generator.Scvtf(D1, X1)
+			} else {
+				v.Generator.Fmov(D1, X1)
+			}
+			v.Generator.Fsub(D0, D0, D1)
+			v.Generator.Push(D0)
+			v.Generator.PushObject(v.Generator.FloatObject())
+			return nil
+		}
+		fmt.Println("Error: combinación de tipos inválida para resta")
+		return nil
+	}
+
+	// Multiplicación
+	if operation == "*" {
+		if leftType == IntType && rightType == IntType {
+			v.Generator.Mul(X0, X0, X1)
+			v.Generator.Push(X0)
+			v.Generator.PushObject(v.Generator.IntObject())
+			return nil
+		}
+		if (leftType == IntType && rightType == FloatType) || (leftType == FloatType && rightType == IntType) || (leftType == FloatType && rightType == FloatType) {
+			if leftType == IntType {
+				v.Generator.Scvtf(D0, X0)
+			} else {
+				v.Generator.Fmov(D0, X0)
+			}
+			if rightType == IntType {
+				v.Generator.Scvtf(D1, X1)
+			} else {
+				v.Generator.Fmov(D1, X1)
+			}
+			v.Generator.Fmul(D0, D0, D1)
+			v.Generator.Push(D0)
+			v.Generator.PushObject(v.Generator.FloatObject())
+			return nil
+		}
+		fmt.Println("Error: combinación de tipos inválida para multiplicación")
+		return nil
+	}
+
+	// División
+	if operation == "/" {
+		if leftType == IntType && rightType == IntType {
+			// Verificar división por cero
+			v.Generator.Comment("Verificar división por cero (no implementado)")
+			v.Generator.Div(X0, X0, X1)
+			v.Generator.Push(X0)
+			v.Generator.PushObject(v.Generator.IntObject())
+			return nil
+		}
+		if (leftType == IntType && rightType == FloatType) || (leftType == FloatType && rightType == IntType) || (leftType == FloatType && rightType == FloatType) {
+			if leftType == IntType {
+				v.Generator.Scvtf(D0, X0)
+			} else {
+				v.Generator.Fmov(D0, X0)
+			}
+			if rightType == IntType {
+				v.Generator.Scvtf(D1, X1)
+			} else {
+				v.Generator.Fmov(D1, X1)
+			}
+			v.Generator.Fdiv(D0, D0, D1)
+			v.Generator.Push(D0)
+			v.Generator.PushObject(v.Generator.FloatObject())
+			return nil
+		}
+		fmt.Println("Error: combinación de tipos inválida para división")
+		return nil
+	}
+
+	// Módulo
+	if operation == "%" {
+		if leftType == IntType && rightType == IntType {
+			// Verificar división por cero
+			v.Generator.Comment("Verificar módulo por cero (no implementado)")
+			v.Generator.Comment("Módulo no implementado (placeholder)")
+			v.Generator.Push(X0)
+			v.Generator.PushObject(v.Generator.IntObject())
+			return nil
+		}
+		fmt.Println("Error: combinación de tipos inválida para módulo")
+		return nil
+	}
+
+	fmt.Println("Error: operación aritmética no soportada o combinación de tipos inválida")
 	return nil
 }
 
 func (v *ArmVisitor) VisitDeclAssign(ctx *compiler.DeclAssignContext) interface{} {
 	varName := ctx.ID().GetText()
-	v.Generator.Comment(fmt.Sprintf("Declaración de variable: %s", varName))
+	varType := "int"          // Por defecto, puedes mejorar para detectar el tipo real
+	var value interface{} = 0 // Valor por defecto para int
+	var stackType StackObjectType = IntType
 
-	// Visitar la expresión para obtener su valor
-	v.Visit(ctx.Expresion())
+	if ctx.Expresion() != nil {
+		v.Visit(ctx.Expresion())
+		// Extraer el tipo real de la expresión
+		obj := v.Generator.TopObject()
+		stackType = obj.Type
+		v.Generator.PopObject(X0)
+		v.Generator.Push(X0)
+		if stackType == FloatType {
+			varType = "float64"
+			value = 0.0
+		} else if stackType == StringType {
+			varType = "string"
+			value = ""
+		} else if stackType == BoolType {
+			varType = "bool"
+			value = false
+		}
+	} else {
+		// Reservar espacio en la pila ARM para el valor por defecto
+		if varType == "int" {
+			v.Generator.Mov(X0, 0)
+			v.Generator.Push(X0)
+			stackType = IntType
+		} else if varType == "float64" {
+			v.Generator.Comment("Valor por defecto float64 (0.0)")
+			v.Generator.PushConstant(v.Generator.FloatObject(), 0.0)
+			stackType = FloatType
+		} else if varType == "string" {
+			v.Generator.Comment("Valor por defecto string (\"\")")
+			v.Generator.PushConstant(v.Generator.StringObject(), "")
+			stackType = StringType
+		} else if varType == "bool" {
+			v.Generator.Mov(X0, 0)
+			v.Generator.Push(X0)
+			stackType = BoolType
+		}
+	}
 
-	// Obtener el objeto de la pila
-	topObject := v.Generator.TopObject()
-
-	// Crear objeto para la variable
+	err := v.DeclareVariable(varName, varType, value)
+	if err != nil {
+		fmt.Println(err)
+	}
+	// Registrar el objeto en la pila ARM
 	varObj := StackObject{
-		Type:   topObject.Type,
-		Length: 8, // Todos nuestros tipos son de 8 bytes por ahora
+		Type:   stackType,
+		Length: 8,
 		Depth:  v.Generator.depth,
 		Id:     &varName,
 	}
-
-	// Para strings, necesitamos manejar el heap
-	if topObject.Type == StringType {
-		// El string ya está en el heap, solo necesitamos guardar el puntero
-		v.Generator.PopObject(X0)
-		v.Generator.Push(X0) // Volver a poner el puntero en la pila
-		v.Generator.PushObject(varObj)
-		v.Generator.TagObject(varName)
-	} else {
-		// Para otros tipos, simplemente asignamos espacio en la pila
-		v.Generator.PushObject(varObj)
-		v.Generator.TagObject(varName)
-	}
-
+	v.Generator.PushObject(varObj)
+	v.Generator.TagObject(varName)
 	return nil
 }
 
 func (v *ArmVisitor) VisitDirectAssign(ctx *compiler.DirectAssignContext) interface{} {
-	assigne := ctx.Expresion()
+	varName := ctx.Id_pattern().GetText()
+	v.Visit(ctx.Expresion())
+	// El nuevo valor está en la cima de la pila ARM
+	// PopObject saca el valor y lo pone en X0
+	offset, _ := v.Generator.GetObject(varName)
+	obj := v.Generator.TopObject()
+	v.Generator.PopObject(X0)
+	v.Generator.Mov(X1, offset)
+	v.Generator.Add(X1, SP, X1)
+	if obj.Type == FloatType {
+		v.Generator.Str(X0, X1, 0) // Para float, X0 contiene el valor binario
+	} else if obj.Type == StringType {
+		v.Generator.Str(X0, X1, 0) // Para string, X0 contiene la dirección
+	} else {
+		v.Generator.Str(X0, X1, 0) // Para int y bool
+	}
 
-	if assigne == assigne.(*compiler.ValorexpresionContext) {
-
-		var varname = ctx.Id_pattern().GetText()
-
-		v.Generator.Comment("Direct assignment to variable: " + varname)
-		v.Visit(ctx.Expresion())
-		var valueObject = v.Generator.PopObject(X0)
-
-		var offset, varObject = v.Generator.GetObject(varname)
-
-		v.Generator.Mov(X1, offset)
-		v.Generator.Add(X1, SP, X1)
-		v.Generator.Str(X0, X1, 0)
-
-		varObject.Type = valueObject.Type
-
-		v.Generator.Push(X0)
-		v.Generator.PushObject(varObject)
+	variable, found := v.FindVariable(varName)
+	if !found {
+		fmt.Printf("Error: variable '%s' no declarada en este ámbito\n", varName)
+		return nil
+	}
+	// Validar tipo (aquí solo int, float64, string, bool)
+	if variable.Type != "int" && variable.Type != "float64" && variable.Type != "string" && variable.Type != "bool" {
+		fmt.Printf("Error: tipo incompatible en asignación a '%s'\n", varName)
+		return nil
 	}
 	return nil
 }
@@ -554,5 +572,126 @@ func (v *ArmVisitor) VisitElseStmt(ctx *compiler.ElseStmtContext) interface{} {
 		v.Visit(stmt)
 	}
 	//v.ScopeTrace.PopScope()
+	return nil
+}
+
+// Implementación de VisitFuncDecl
+func (v *ArmVisitor) VisitFuncDecl(ctx *compiler.FuncDeclContext) interface{} {
+	if ctx.ID() == nil {
+		fmt.Println("FuncDeclContext sin ID. Nodo:", ctx.GetText())
+		return nil
+	}
+	funcName := ctx.ID().GetText()
+	v.Generator.Comment("Función: " + funcName)
+
+	if funcName == "main" {
+		v.EnterScope()
+		for _, stmt := range ctx.AllStmt() {
+			v.Visit(stmt)
+		}
+		v.ExitScope()
+	}
+	return nil
+}
+
+// Métodos para gestión de scopes y variables en ArmVisitor
+
+// Crear un nuevo scope (por ejemplo, al entrar a un bloque)
+func (v *ArmVisitor) EnterScope() {
+	v.Scope = NewArmScope(v.Scope)
+}
+
+// Salir del scope actual (al salir de un bloque)
+func (v *ArmVisitor) ExitScope() {
+	if v.Scope.Parent != nil {
+		v.Scope = v.Scope.Parent
+	}
+}
+
+// Declarar una variable en el scope actual
+func (v *ArmVisitor) DeclareVariable(name string, typ string, value interface{}) error {
+	if _, exists := v.Scope.Variables[name]; exists {
+		return fmt.Errorf("La variable '%s' ya existe en este ámbito", name)
+	}
+	v.Scope.Variables[name] = &ArmVariable{Name: name, Type: typ, Value: value}
+	return nil
+}
+
+// Buscar una variable en los scopes (desde el más interno al más externo)
+func (v *ArmVisitor) FindVariable(name string) (*ArmVariable, bool) {
+	scope := v.Scope
+	for scope != nil {
+		if variable, ok := scope.Variables[name]; ok {
+			return variable, true
+		}
+		scope = scope.Parent
+	}
+	return nil, false
+}
+
+// Implementación de VisitDeclAssignType
+func (v *ArmVisitor) VisitDeclAssignType(ctx *compiler.DeclAssignTypeContext) interface{} {
+	varName := ctx.Id_pattern().GetText()
+	varType := ctx.Var_type().GetText()
+	var value interface{}
+	var stackType StackObjectType = IntType
+
+	if ctx.Expresion() != nil {
+		v.Visit(ctx.Expresion())
+		obj := v.Generator.TopObject()
+		stackType = obj.Type
+		v.Generator.PopObject(X0)
+		v.Generator.Push(X0)
+		if stackType == FloatType {
+			varType = "float64"
+			value = 0.0
+		} else if stackType == StringType {
+			varType = "string"
+			value = ""
+		} else if stackType == BoolType {
+			varType = "bool"
+			value = false
+		}
+	} else {
+		// Asignar valor por defecto según el tipo y reservar espacio en la pila ARM
+		switch varType {
+		case "int":
+			value = 0
+			v.Generator.Mov(X0, 0)
+			v.Generator.Push(X0)
+			stackType = IntType
+		case "float", "float64":
+			value = 0.0
+			v.Generator.Comment("Valor por defecto float64 (0.0)")
+			v.Generator.PushConstant(v.Generator.FloatObject(), 0.0)
+			stackType = FloatType
+		case "string":
+			value = ""
+			v.Generator.Comment("Valor por defecto string (\"\")")
+			v.Generator.PushConstant(v.Generator.StringObject(), "")
+			stackType = StringType
+		case "bool":
+			value = false
+			v.Generator.Mov(X0, 0)
+			v.Generator.Push(X0)
+			stackType = BoolType
+		default:
+			value = nil
+		}
+	}
+
+	err := v.DeclareVariable(varName, varType, value)
+	if err != nil {
+		fmt.Println(err)
+	}
+	// Registrar el objeto en la pila ARM
+	varObj := StackObject{
+		Type:   stackType,
+		Length: 8,
+		Depth:  v.Generator.depth,
+		Id:     &varName,
+	}
+	v.Generator.PushObject(varObj)
+	v.Generator.TagObject(varName)
 	return nil
 }
